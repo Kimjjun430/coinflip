@@ -48,6 +48,31 @@ header h1 {
   text-shadow: 0 0 10px var(--primary-color);
 }
 
+.earnings-display {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: right;
+}
+
+.earnings-display h2 {
+  margin: 0;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.up-earnings #up-earnings-amount {
+  color: var(--success-color);
+  font-weight: bold;
+  text-shadow: 0 0 8px var(--success-color);
+}
+
+.down-earnings #down-earnings-amount {
+  color: var(--error-color);
+  font-weight: bold;
+  text-shadow: 0 0 8px var(--error-color);
+}
+
 .balance h2 {
   margin: 0;
   font-size: 1.2em;
