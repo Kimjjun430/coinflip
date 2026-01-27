@@ -1,1 +1,85 @@
-/* Add styles here */
+:root {
+  --background-color: #1a1a1a;
+  --surface-color: #2a2a2a;
+  --primary-color: #00ffc3;
+  --text-color: #f0f0f0;
+  --error-color: #ff4757;
+  --success-color: #2ed573;
+  --border-radius: 12px;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@keyframes result-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  80% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  /* Adding a subtle noise texture */
+  background-image: linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px);
+  background-size: 2px 2px;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+header {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--surface-color);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5em;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-color);
+}
+
+.balance h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+#balance-amount {
+  color: var(--success-color);
+  font-weight: bold;
+  text-shadow: 0 0 12px var(--success-color);
+  transition: all 0.3s ease;
+}
+
+main {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+}
+
+coin-flip-game {
+  width: 100%;
+  display: block;
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333;
+}
+
+/* Add this to the web component's style to apply the animation */
+.result-animation {
+    animation: result-pop 0.4s ease-out;
+}
