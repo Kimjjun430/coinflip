@@ -1,15 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getFirestore, doc, onSnapshot, updateDoc, increment, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// TODO: Replace with your project's actual Firebase configuration
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+const firebaseConfig = {"projectId":"coingame-553d0","appId":"1:390053516001:web:64e1241b7a7ce9ec98dda0","storageBucket":"coingame-553d0.firebasestorage.app","apiKey":"AIzaSyAJ58KcHp5sxGpH_f6kmgQDXday9nSyl4g","authDomain":"coingame-553d0.firebaseapp.com","messagingSenderId":"390053516001","measurementId":"G-8ELQMWV4HS"};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -274,14 +266,15 @@ class CoinFlipGame extends HTMLElement {
     });
   }
 
-  async updateGlobalEarnings(type, amount) {
+  async updateGlobalEarnings(type, amount, isWin) {
+    const actualAmount = isWin ? amount : -amount;
     if (type === 'up') {
       await updateDoc(globalEarningsRef, {
-        up_earnings: increment(amount)
+        up_earnings: increment(actualAmount)
       });
     } else if (type === 'down') {
       await updateDoc(globalEarningsRef, {
-        down_earnings: increment(amount)
+        down_earnings: increment(actualAmount)
       });
     }
   }
@@ -343,8 +336,8 @@ class CoinFlipGame extends HTMLElement {
     
     this.updateHistoryList();
     this.updateBalanceDisplay();
-    // Update global earnings in Firestore
-    this.updateGlobalEarnings(choice, changeAmount);
+    // Update global earnings in Firestore with win/loss status
+    this.updateGlobalEarnings(choice, changeAmount, isWin);
   }
 
   resetGame() {
