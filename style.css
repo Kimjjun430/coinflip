@@ -1,164 +1,177 @@
-/* Importing a modern font (e.g., Inter from Google Fonts) - will add to index.html */
+/* Importing a modern font (e.g., Inter from Google Fonts) - already in index.html */
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap'); */
+/* For cyberpunk font 'Press Start 2P' - already in index.html */
+/* @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); */
+
+/* Global Selection Style */
+::selection {
+  background-color: var(--neonBlue);
+  color: var(--darkBg);
+}
+
+/* Custom Scrollbar for Cyberpunk Feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--darkBg);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--neonPurple);
+  border-radius: 10px;
+  border: 2px solid var(--darkBg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neonBlue);
+}
 
 :root {
-  --background-color: #0d1117; /* GitHub Dark Mode bg */
-  --surface-color: #161b22; /* Slightly lighter surface */
-  --primary-color: #28a745; /* Green for success/primary actions */
-  --secondary-color: #007bff; /* Blue accent */
-  --text-color: #c9d1d9; /* Light text on dark bg */
-  --text-secondary: #8b949e; /* Secondary text color */
-  --error-color: #d12d2d; /* Red for errors */
-  --success-color: #28a745; /* Green for success */
-  --warning-color: #ffc107; /* Yellow for warnings */
-  --border-color: #30363d; /* Subtle border */
+  --darkBg: #080A0C;
+  --darkSurface: #1A1E24; /* Slightly lighter for components */
+  --darkerSurface: #12161A;
+  --neonBlue: #00F0FF;
+  --neonPurple: #A32EFF; /* Stronger purple for accents */
+  --neonGreen: #39FF14;
+  --neonPink: #FF0077; /* New accent color */
+  --text-primary: #E0E0E0;
+  --text-secondary: #9FA8DA; /* Muted blue for secondary text */
+  --error-color: #FF4136; /* Bright red for errors */
+  --success-color: #2ECC40; /* Bright green for success */
+  --warning-color: #FFDC00; /* Bright yellow for warnings */
+
   --border-radius: 8px;
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.2);
+  --font-family-primary: 'Inter', sans-serif;
+  --font-family-cyber: 'Press Start 2P', cursive;
+
+  --glow-intensity: 0.8; /* Control glow strength */
+  --neon-shadow-blue: 0 0 5px var(--neonBlue), 0 0 10px var(--neonBlue), 0 0 20px var(--neonBlue), 0 0 40px rgba(0, 240, 255, var(--glow-intensity));
+  --neon-shadow-green: 0 0 5px var(--neonGreen), 0 0 10px var(--neonGreen), 0 0 20px var(--neonGreen), 0 0 40px rgba(57, 255, 20, var(--glow-intensity));
+  --neon-shadow-purple: 0 0 5px var(--neonPurple), 0 0 10px var(--neonPurple), 0 0 20px var(--neonPurple), 0 0 40px rgba(163, 46, 255, var(--glow-intensity));
 }
 
-@keyframes result-pop {
-  0% { transform: scale(0.8); opacity: 0; }
-  80% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+/* Basic Animations */
+@keyframes neon-glow-blue {
+  0%, 100% { text-shadow: var(--neon-shadow-blue); }
+  50% { text-shadow: none; }
 }
+
+@keyframes neon-glow-green {
+  0%, 100% { text-shadow: var(--neon-shadow-green); }
+  50% { text-shadow: none; }
+}
+
+@keyframes subtle-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
 
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-family);
-  background: var(--background-color);
-  color: var(--text-color);
+  font-family: var(--font-family-primary);
+  background-color: var(--darkBg);
+  background-image: 
+    radial-gradient(ellipse at center, rgba(0,240,255,0.1) 0%, transparent 70%),
+    linear-gradient(rgba(159,168,218,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159,168,218,0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   line-height: 1.6;
   font-size: 16px;
+  overflow-x: hidden; /* Prevent horizontal scroll from glowing elements */
 }
 
+/* General Link Style for Cyberpunk */
+a {
+  color: var(--neonBlue);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--neonGreen);
+  text-shadow: 0 0 5px var(--neonGreen);
+}
+
+
 header {
-  width: 100%;
-  max-width: 800px;
-  padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column; /* Changed to column for better responsiveness */
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid var(--border-color);
-  background: linear-gradient(145deg, var(--surface-color), #21262d);
-  box-shadow: var(--shadow-dark);
-  margin-bottom: 20px;
+  /* Tailwind classes on index.html body will handle much of this, but ensure base styles */
+  border-bottom: 2px solid var(--neonPurple);
+  box-shadow: 0 0 15px var(--neonPurple);
+  animation: subtle-flicker 4s infinite alternate;
 }
 
 header h1 {
-  margin: 0;
-  font-size: 2em; /* Larger title */
-  color: var(--primary-color);
-  text-shadow: 0 0 15px var(--primary-color), 0 0 30px rgba(40, 167, 69, 0.5); /* More vibrant shadow */
-  font-weight: 700;
+  font-family: var(--font-family-cyber);
+  text-shadow: var(--neon-shadow-green);
+  animation: neon-glow-green 1.5s infinite alternate;
 }
 
-.balance {
-  text-align: center;
-}
-
-.balance h2 {
-  margin: 0;
-  font-size: 1.5em;
+header p {
   color: var(--text-secondary);
 }
 
+
+.balance h2 {
+  color: var(--text-primary);
+}
+
 #balance-amount {
-  color: var(--success-color);
-  font-weight: bold;
-  font-size: 1.8em; /* Larger balance amount */
-  text-shadow: 0 0 10px var(--success-color), 0 0 20px rgba(40, 167, 69, 0.5);
-  transition: all 0.3s ease;
+  color: var(--neonGreen);
+  text-shadow: var(--neon-shadow-green);
 }
 
 main {
-  width: 100%;
-  max-width: 800px;
-  padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  flex-grow: 1; /* Allow main to grow */
+  /* main is now handled by tailwind container, keep minimal here */
+  flex-grow: 1;
 }
 
 coin-flip-game {
-  width: 100%;
-  display: block;
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  padding: 30px; /* More padding */
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-color); /* Deeper shadow, subtle border */
-  border: none; /* Remove explicit border */
-  display: flex; /* Use flex for internal layout */
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  display: block; /* Ensure it's a block element */
+  background: linear-gradient(145deg, var(--darkSurface), var(--darkerSurface));
+  border: 2px solid var(--neonBlue);
+  box-shadow: 0 0 15px var(--neonBlue), 0 0 30px rgba(0, 240, 255, 0.4);
+  animation: neon-glow-blue 3s infinite alternate;
 }
 
-/* Add this to the web component's style to apply the animation */
-.result-animation {
-    animation: result-pop 0.4s ease-out;
-}
-
-/* Coin Flip Styles */
+/* Coin Flip Styles (Keep as is mostly, just ensuring it fits general theme) */
 .coin-container {
-  width: 180px; /* Slightly larger coin */
-  height: 180px;
-  perspective: 1200px; /* Adjusted perspective */
-  margin: 30px auto;
-  cursor: pointer;
+  /* width and height are fine */
+  margin: 40px auto; /* More space */
+  border: 2px solid var(--neonPink); /* Neon pink border */
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--neonPink);
 }
 
 .coin {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 1.5s ease-out; /* Adjusted duration for toss animation */
+  /* transition is fine */
 }
 
 .coin.flipping {
-  animation: coin-flip 1.5s forwards; /* Match new transition duration */
+  /* animation is fine */
 }
 
 .heads, .tails {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2); /* Enhanced shadow and inner highlight */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2em;
-  font-weight: bold;
-  color: #fff;
-  border: 4px solid rgba(255, 215, 0, 0.7); /* Gold-like edge with transparency */
+  /* Consistent with new theme */
+  border: 4px solid var(--neonBlue); /* Blue edge glow */
+  box-shadow: 0 0 10px var(--neonBlue), inset 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 .heads {
-  background-image: url('https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png'); /* Dogecoin Meme Coin image */
-  background-color: #ffc107; /* More vibrant gold, matching Dogecoin color */
+  /* image and color fine */
 }
 
 .tails {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png'); /* Placeholder Tails image */
-  background-color: #a0a0a0; /* Deeper silver */
-  transform: rotateY(180deg);
+  /* image and color fine */
 }
 
 @keyframes coin-flip {
+  /* Already updated, keep as is for realistic toss */
   0% {
     transform: perspective(1000px) rotateY(0deg) translateY(0px);
     animation-timing-function: ease-out;
@@ -184,10 +197,41 @@ coin-flip-game {
 /* Result display */
 .coin-result {
   text-align: center;
-  margin-top: 20px; /* Reduced margin */
-  font-size: 2em; /* Larger result text */
+  margin-top: 25px; /* Adjust margin */
+  font-size: 2.5em; /* Larger result text */
   font-weight: bold;
-  color: var(--primary-color);
-  min-height: 1.5em; /* Prevent layout shift */
-  text-shadow: var(--shadow-light);
+  color: var(--neonGreen);
+  text-shadow: var(--neon-shadow-green);
+  min-height: 1.5em;
+  animation: neon-glow-green 2s infinite alternate;
+}
+
+/* History List Styling */
+.history h3 {
+  color: var(--text-primary);
+  text-shadow: 0 0 5px var(--neonBlue);
+}
+
+.history-list {
+  border: 1px solid var(--neonPurple);
+  background-color: var(--darkerSurface);
+  box-shadow: 0 0 10px var(--neonPurple);
+}
+
+.history-item {
+  border-bottom: 1px dashed rgba(163, 46, 255, 0.3); /* Dashed neon border */
+  color: var(--text-primary);
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-item.win .amount {
+  color: var(--success-color);
+  text-shadow: 0 0 5px var(--success-color);
+}
+.history-item.loss .amount {
+  color: var(--error-color);
+  text-shadow: 0 0 5px var(--error-color);
 }

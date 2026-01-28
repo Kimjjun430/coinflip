@@ -9,8 +9,6 @@ class CoinFlipGame extends HTMLElement {
     // Load balance from localStorage, or use initialBalance if not found
     this.balance = parseFloat(localStorage.getItem('coinFlipBalance')) || this.initialBalance;
     this.history = [];
-    this.dailyClaimsUsed = 0; // Initialize
-    this.lastClaimDate = ''; // Initialize
 
     this.shadowRoot.innerHTML = `
                             <style>
@@ -225,7 +223,6 @@ class CoinFlipGame extends HTMLElement {
     this.coin.addEventListener('click', () => this.flipCoin());
     this.claimButton = this.shadowRoot.getElementById('claim-button');
     this.claimButton.addEventListener('click', () => this.claimFreeBalance());
-    this.loadFreeClaims(); // Load claims when component connects
     this.updateBalanceDisplay();
     this.updateClaimButton(); // Update button state
   }
@@ -234,57 +231,28 @@ class CoinFlipGame extends HTMLElement {
     if (this.balanceElement) this.balanceElement.textContent = `$${this.balance.toLocaleString()}`;
   }
 
-  getTodayDateString() {
-    const today = new Date();
-    return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-  }
 
-  loadFreeClaims() {
-    const storedClaims = localStorage.getItem('coinFlipDailyClaims');
-    const storedDate = localStorage.getItem('coinFlipLastClaimDate');
-    const today = this.getTodayDateString();
-
-    if (storedDate === today) {
-      this.dailyClaimsUsed = parseInt(storedClaims || '0', 10);
-      this.lastClaimDate = storedDate;
-    } else {
-      // New day, reset claims
-      this.dailyClaimsUsed = 0;
-      this.lastClaimDate = today;
-      this.saveFreeClaims();
-    }
-  }
-
-  saveFreeClaims() {
-    localStorage.setItem('coinFlipDailyClaims', this.dailyClaimsUsed.toString());
-    localStorage.setItem('coinFlipLastClaimDate', this.lastClaimDate);
-  }
 
   updateClaimButton() {
     const MIN_BALANCE_FOR_CLAIM = 1000;
-    const MAX_CLAIMS = 3;
     if (this.claimButton) {
       if (this.balance >= MIN_BALANCE_FOR_CLAIM) {
         this.claimButton.disabled = true;
         this.claimButton.textContent = `잔액이 $${MIN_BALANCE_FOR_CLAIM} 이상입니다 (무료 지급 불가)`;
-      } else if (this.dailyClaimsUsed >= MAX_CLAIMS) {
-        this.claimButton.disabled = true;
-        this.claimButton.textContent = '일일 무료 지급 횟수 소진';
-      } else {
+      } else { // Simplified: no daily claims check
         this.claimButton.disabled = false;
-        this.claimButton.textContent = `무료 $${this.initialBalance.toLocaleString()} 지급 (${MAX_CLAIMS - this.dailyClaimsUsed}회 남음) - (잔액 < $${MIN_BALANCE_FOR_CLAIM})`;
+        this.claimButton.textContent = `잔액이 $${MIN_BALANCE_FOR_CLAIM} 미만 시 무료 $${this.initialBalance.toLocaleString()} 지급`;
       }
     }
   }
 
   claimFreeBalance() {
     const MIN_BALANCE_FOR_CLAIM = 1000;
-    const MAX_CLAIMS = 3;
 
-    if (this.balance < MIN_BALANCE_FOR_CLAIM && this.dailyClaimsUsed < MAX_CLAIMS) {
+    if (this.balance < MIN_BALANCE_FOR_CLAIM) { // Condition simplified
       this.balance = this.initialBalance; // Reset to initial balance (10000)
-      this.dailyClaimsUsed++;
-      this.saveFreeClaims(); // Save updated claims
+      // No more dailyClaimsUsed++;
+      // No more saveFreeClaims();
       this.saveBalance(); // Save updated balance
       this.updateBalanceDisplay();
       this.updateClaimButton();
@@ -366,7 +334,7 @@ class CoinFlipGame extends HTMLElement {
               this.balance = 0;
               resultText += ' 청산되었습니다!';
               this.saveBalance(); // Save updated balance
-              this.updateClaimButton(); // Update claim button if liquidated
+              // No need to call updateClaimButton here, as it's called after each balance update.
             }    
         // Display results immediately
         resultDisplay.textContent = resultText;
