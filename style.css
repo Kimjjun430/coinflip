@@ -100,11 +100,11 @@ coin-flip-game {
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 1.2s ease-out; /* Increased duration for more dynamic flip */
+  transition: transform 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Longer and bouncier transition */
 }
 
 .coin.flipping {
-  animation: coin-flip 1.2s forwards; /* The animation will be applied dynamically via JS */
+  animation: coin-flip 1.8s forwards; /* Match the new transition duration */
 }
 
 .heads, .tails {
@@ -127,34 +127,38 @@ coin-flip-game {
 
 .heads {
   background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Indian_5_Rupee_Coin.png'); /* Placeholder Heads image */
-  background-color: #ffcc00;
+  background-color: #ffcc00; /* Distinct gold color for heads */
 }
 
 .tails {
   background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png'); /* Placeholder Tails image */
-  background-color: #cccccc;
+  background-color: #cccccc; /* Distinct silver color for tails */
   transform: rotateY(180deg);
 }
 
 @keyframes coin-flip {
-  0% { 
-    transform: rotateY(0deg) translateY(0); 
-    animation-timing-function: ease-in;
+  0% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg) rotateZ(0deg) translateY(0px) scale(1);
   }
-  25% { 
-    transform: rotateY(900deg) translateY(-20px) scale(1.05); /* Jump up, slight scale, faster rotation */
-    animation-timing-function: ease-out;
+  20% {
+    transform: perspective(1000px) rotateY(720deg) rotateX(180deg) rotateZ(90deg) translateY(-50px) scale(1.1);
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out */
   }
-  50% {
-    transform: rotateY(1800deg) translateY(0) scale(1); /* Back down */
-    animation-timing-function: ease-in;
+  40% {
+    transform: perspective(1000px) rotateY(1440deg) rotateX(360deg) rotateZ(180deg) translateY(-80px) scale(1.2);
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out */
   }
-  75% { 
-    transform: rotateY(2700deg) translateY(-10px) scale(1.02); /* Slight bounce */
-    animation-timing-function: ease-out;
+  60% {
+    transform: perspective(1000px) rotateY(2160deg) rotateX(540deg) rotateZ(270deg) translateY(-50px) scale(1.1);
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in */
   }
-  100% { 
-    transform: rotateY(3600deg) translateY(0) scale(1); /* End state, more rotations */
+  80% {
+    transform: perspective(1000px) rotateY(2880deg) rotateX(720deg) rotateZ(360deg) translateY(-10px) scale(1.05);
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in */
+  }
+  100% {
+    transform: perspective(1000px) rotateY(3600deg) rotateX(720deg) rotateZ(360deg) translateY(0px) scale(1);
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1); /* ease-out */
   }
 }
 

@@ -108,6 +108,9 @@ class CoinFlipGame extends HTMLElement {
     // Remove earnings elements as they are no longer relevant for a simple coin flip
     // this.upEarningsElement = document.getElementById('up-earnings');
     // this.downEarningsElement = document.getElementById('down-earnings');
+
+    // Load coin sound effect
+    this.coinSound = new Audio('https://freesound.org/data/previews/165/165415_291039-lq.mp3'); // Using the sourced sound effect
   }
 
   connectedCallback() {
@@ -145,19 +148,23 @@ class CoinFlipGame extends HTMLElement {
     resultDisplay.textContent = 'Flipping...';
     resultDisplay.style.color = 'var(--primary-color)';
 
-    // Reset coin rotation
-    coin.style.transform = 'rotateY(0deg)';
+    // Play coin flip sound
+    this.coinSound.currentTime = 0; // Rewind to start
+    this.coinSound.play().catch(e => console.error("Error playing sound:", e));
+
+    // Reset coin rotation (initial state for animation)
+    coin.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) rotateZ(0deg) translateY(0px) scale(1)'; // Set explicitly for reset
     coin.classList.remove('heads-up', 'tails-up');
 
     // Trigger animation
     coin.classList.add('flipping');
 
-    // Simulate coin flip after animation starts
+    // Simulate coin flip logic after animation starts
     setTimeout(() => {
       const isHeads = Math.random() < 0.5; // True for heads, false for tails
-      const finalRotation = isHeads ? 1800 : 1980; // 5 full rotations + 0 for heads, or +180 for tails
-
-      coin.style.transform = `rotateY(${finalRotation}deg)`;
+      // The CSS animation (with forwards fill-mode) will handle the final visual orientation.
+      // We just need to determine the logical outcome here.
+      
       coin.classList.remove('flipping'); // Remove animation class to allow new animation to be triggered
 
       let resultText, resultColor, historyItem;
@@ -172,13 +179,14 @@ class CoinFlipGame extends HTMLElement {
         resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You won $${effectiveBet.toLocaleString()}!`;
         resultColor = 'var(--success-color)';
         historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
-        coin.classList.add(isHeads ? 'heads-up' : 'tails-up');
+        // No longer adding heads-up/tails-up here directly, CSS final state should determine this.
+        // If specific final orientation needed, apply class after animation for slight adjustment.
       } else {
         this.balance -= effectiveBet;
         resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You lost $${effectiveBet.toLocaleString()}!`;
         resultColor = 'var(--error-color)';
         historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
-        coin.classList.add(isHeads ? 'heads-up' : 'tails-up');
+        // No longer adding heads-up/tails-up here directly, CSS final state should determine this.
       }
 
       if (this.balance <= 0) {
@@ -198,7 +206,7 @@ class CoinFlipGame extends HTMLElement {
       // Re-enable coin click after animation
       coin.style.pointerEvents = 'auto';
 
-    }, 1200); // Duration of the CSS animation
+    }, 1800); // Duration of the CSS animation (1.8s)
   }
 
   updateHistoryList() {

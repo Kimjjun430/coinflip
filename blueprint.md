@@ -14,6 +14,11 @@ This document outlines the design and features of the web application.
     - Sourced widely available coin images for heads and tails (Wikimedia Commons).
     - Modified `style.css` to use these images and updated the `@keyframes coin-flip` for a more dynamic animation, including increased rotations, vertical movement, and scaling during the flip.
     - Adjusted `main.js`'s `setTimeout` duration to synchronize with the new animation.
+- **flipsimu.com-like Animation, Distinct Colors & Sound Integration:**
+    - Modified `style.css` to further enhance the `@keyframes coin-flip` for a more complex and realistic 3D animation, inspired by `flipsimu.com`, introducing `rotateX` and `rotateZ` for tumbling effects, more keyframe steps, and adjusted `cubic-bezier` timing functions.
+    - Confirmed distinct background colors (`#ffcc00` for heads, `#cccccc` for tails) are applied in `style.css`.
+    - Integrated an open-source coin flip sound effect into `main.js`, which plays when the coin is flipped.
+    - Adjusted `setTimeout` duration in `main.js` to `1800ms` to match the new 1.8s CSS animation.
 
 ## Current Task: None
 ### Plan
