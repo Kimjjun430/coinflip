@@ -190,17 +190,20 @@ class CoinFlipGame extends HTMLElement {
     this.updateHistoryList();
     this.updateBalanceDisplay();
 
-    // The animation will play out visually
-    setTimeout(() => {
-      coin.classList.remove('flipping'); // Remove animation class after visual animation
-      // Visually set the coin to the determined outcome
-      if (!isHeads) {
-        coin.classList.add('tails-up');
-      } else {
-        coin.classList.remove('tails-up'); // Ensure it's not present if heads
-      }
-      coin.style.pointerEvents = 'auto'; // Re-enable coin click
-    }, 1500); // Duration of the CSS animation (1.5s)
+    // Visually set the coin to the determined outcome immediately
+    if (!isHeads) {
+      coin.classList.add('tails-up');
+    } else {
+      coin.classList.remove('tails-up'); // Ensure it's not present if heads
+    }
+    coin.style.pointerEvents = 'auto'; // Re-enable coin click immediately
+
+    // Clean up animation class after animation ends
+    const handleAnimationEnd = () => {
+      coin.classList.remove('flipping');
+      coin.removeEventListener('animationend', handleAnimationEnd);
+    };
+    coin.addEventListener('animationend', handleAnimationEnd);
   }
 
   updateHistoryList() {
