@@ -6,7 +6,8 @@ class CoinFlipGame extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     this.initialBalance = 1000;
-    this.balance = this.initialBalance;
+    // Load balance from localStorage, or use initialBalance if not found
+    this.balance = parseFloat(localStorage.getItem('coinFlipBalance')) || this.initialBalance;
     this.history = [];
 
     this.shadowRoot.innerHTML = `
@@ -165,57 +166,63 @@ class CoinFlipGame extends HTMLElement {
     const effectiveBet = betAmount * leverage;
     const winningSide = 'heads'; // Assuming 'heads' is the winning outcome for now.
 
-    if ((isHeads && winningSide === 'heads') || (!isHeads && winningSide === 'tails')) {
-      this.balance += effectiveBet;
-      resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You won $${effectiveBet.toLocaleString()}!`;
-      resultColor = 'var(--success-color)';
-      historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
-    } else {
-      this.balance -= effectiveBet;
-      resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You lost $${effectiveBet.toLocaleString()}!`;
-      resultColor = 'var(--error-color)';
-      historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
-    }
-
-    if (this.balance <= 0) {
-      this.balance = 0;
-      resultText += ' You are liquidated!';
-    }
-
-    // Display results immediately
-    resultDisplay.textContent = resultText;
-    resultDisplay.style.color = resultColor;
-    this.history.unshift(historyItem);
-    if (this.history.length > 10) this.history.pop();
-    this.updateHistoryList();
-    this.updateBalanceDisplay();
-
-    // Visually set the coin to the determined outcome immediately
-    if (!isHeads) {
-      coin.classList.add('tails-up');
-    } else {
-      coin.classList.remove('tails-up'); // Ensure it's not present if heads
-    }
-    coin.style.pointerEvents = 'auto'; // Re-enable coin click immediately
-
-    // Clean up animation class after animation ends
-    const handleAnimationEnd = () => {
-      coin.classList.remove('flipping');
-      coin.removeEventListener('animationend', handleAnimationEnd);
-    };
-    coin.addEventListener('animationend', handleAnimationEnd);
-  }
-
-  updateHistoryList() {
-    const historyList = this.shadowRoot.getElementById('history-list');
-    historyList.innerHTML = '';
-    for (const item of this.history) {
-      const li = document.createElement('li');
-      li.classList.add('history-item', item.outcome);
-      li.innerHTML = `<span>Result: ${item.choice}</span><span class="amount">${item.amount}</span>`;
-      historyList.appendChild(li);
-    }
-  }
-}
+          if ((isHeads && winningSide === 'heads') || (!isHeads && winningSide === 'tails')) {
+            this.balance += effectiveBet;
+            resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You won $${effectiveBet.toLocaleString()}!`;
+            resultColor = 'var(--success-color)';
+            historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
+            this.saveBalance(); // Save updated balance
+        } else {
+          this.balance -= effectiveBet;
+          resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You lost $${effectiveBet.toLocaleString()}!`;
+          resultColor = 'var(--error-color)';
+          historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
+          this.saveBalance(); // Save updated balance
+        }
+    
+        if (this.balance <= 0) {
+          this.balance = 0;
+          resultText += ' You are liquidated!';
+          this.saveBalance(); // Save updated balance
+        }
+    
+        // Display results immediately
+        resultDisplay.textContent = resultText;
+        resultDisplay.style.color = resultColor;
+        this.history.unshift(historyItem);
+        if (this.history.length > 10) this.history.pop();
+        this.updateHistoryList();
+        this.updateBalanceDisplay();
+    
+        // Visually set the coin to the determined outcome immediately
+        if (!isHeads) {
+          coin.classList.add('tails-up');
+        } else {
+          coin.classList.remove('tails-up'); // Ensure it's not present if heads
+        }
+        coin.style.pointerEvents = 'auto'; // Re-enable coin click immediately
+    
+        // Clean up animation class after animation ends
+        const handleAnimationEnd = () => {
+          coin.classList.remove('flipping');
+          coin.removeEventListener('animationend', handleAnimationEnd);
+        };
+        coin.addEventListener('animationend', handleAnimationEnd);
+      }
+    
+      saveBalance() {
+        localStorage.setItem('coinFlipBalance', this.balance.toString());
+      }
+    
+      updateHistoryList() {
+        const historyList = this.shadowRoot.getElementById('history-list');
+        historyList.innerHTML = '';
+        for (const item of this.history) {
+          const li = document.createElement('li');
+          li.classList.add('history-item', item.outcome);
+          li.innerHTML = `<span>Result: ${item.choice}</span><span class="amount">${item.amount}</span>`;
+          historyList.appendChild(li);
+        }
+      }}
 
 customElements.define('coin-flip-game', CoinFlipGame);

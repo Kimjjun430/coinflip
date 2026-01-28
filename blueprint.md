@@ -27,6 +27,9 @@ This document outlines the design and features of the web application.
 - **Immediate Coin Clickability:**
     - Modified `main.js` to enable immediate re-clickability of the coin after a flip. `coin.style.pointerEvents = 'auto';` and the `tails-up` class application logic are now executed immediately after the result display.
     - Replaced the `setTimeout` for animation cleanup with an `animationend` event listener on the coin element, ensuring the `flipping` class is removed without delaying user interaction.
+- **Persist User Balance Across Sessions:**
+    - Implemented logic in the `CoinFlipGame` constructor to load the user's balance from `localStorage` using the key `'coinFlipBalance'`, falling back to the `initialBalance` if no saved data is found.
+    - Added a `saveBalance()` method that stores the current `this.balance` in `localStorage` and integrated calls to this method whenever the balance is updated (after a win, loss, or liquidation).
 
 ## Current Task: None
 ### Plan
