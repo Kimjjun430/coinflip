@@ -159,54 +159,48 @@ class CoinFlipGame extends HTMLElement {
     // Trigger animation
     coin.classList.add('flipping');
 
-    // Simulate coin flip logic after animation starts
+    // Determine flip outcome immediately
+    const isHeads = Math.random() < 0.5; // True for heads, false for tails
+    let resultText, resultColor, historyItem;
+    const effectiveBet = betAmount * leverage;
+    const winningSide = 'heads'; // Assuming 'heads' is the winning outcome for now.
+
+    if ((isHeads && winningSide === 'heads') || (!isHeads && winningSide === 'tails')) {
+      this.balance += effectiveBet;
+      resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You won $${effectiveBet.toLocaleString()}!`;
+      resultColor = 'var(--success-color)';
+      historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
+    } else {
+      this.balance -= effectiveBet;
+      resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You lost $${effectiveBet.toLocaleString()}!`;
+      resultColor = 'var(--error-color)';
+      historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
+    }
+
+    if (this.balance <= 0) {
+      this.balance = 0;
+      resultText += ' You are liquidated!';
+    }
+
+    // Display results immediately
+    resultDisplay.textContent = resultText;
+    resultDisplay.style.color = resultColor;
+    this.history.unshift(historyItem);
+    if (this.history.length > 10) this.history.pop();
+    this.updateHistoryList();
+    this.updateBalanceDisplay();
+
+    // The animation will play out visually
     setTimeout(() => {
-      const isHeads = Math.random() < 0.5; // True for heads, false for tails
-      // The CSS animation (with forwards fill-mode) will handle the final visual orientation.
-      // We just need to determine the logical outcome here.
-      
-      coin.classList.remove('flipping'); // Remove animation class to allow new animation to be triggered
-
-      let resultText, resultColor, historyItem;
-      const effectiveBet = betAmount * leverage;
-
-      // For a simple coin flip, let's assume 'Heads' is the winning outcome for now.
-      // The user can later customize which side wins.
-      const winningSide = 'heads';
-
-      if ((isHeads && winningSide === 'heads') || (!isHeads && winningSide === 'tails')) {
-        this.balance += effectiveBet;
-        resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You won $${effectiveBet.toLocaleString()}!`;
-        resultColor = 'var(--success-color)';
-        historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
-        // No longer adding heads-up/tails-up here directly, CSS final state should determine this.
-        // If specific final orientation needed, apply class after animation for slight adjustment.
+      coin.classList.remove('flipping'); // Remove animation class after visual animation
+      // Visually set the coin to the determined outcome
+      if (!isHeads) {
+        coin.classList.add('tails-up');
       } else {
-        this.balance -= effectiveBet;
-        resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You lost $${effectiveBet.toLocaleString()}!`;
-        resultColor = 'var(--error-color)';
-        historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
-        // No longer adding heads-up/tails-up here directly, CSS final state should determine this.
+        coin.classList.remove('tails-up'); // Ensure it's not present if heads
       }
-
-      if (this.balance <= 0) {
-        this.balance = 0;
-        resultText += ' You are liquidated!';
-      }
-
-      resultDisplay.textContent = resultText;
-      resultDisplay.style.color = resultColor;
-
-      this.history.unshift(historyItem);
-      if (this.history.length > 10) this.history.pop();
-      
-      this.updateHistoryList();
-      this.updateBalanceDisplay();
-
-      // Re-enable coin click after animation
-      coin.style.pointerEvents = 'auto';
-
-    }, 1800); // Duration of the CSS animation (1.8s)
+      coin.style.pointerEvents = 'auto'; // Re-enable coin click
+    }, 1500); // Duration of the CSS animation (1.5s)
   }
 
   updateHistoryList() {

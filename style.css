@@ -100,11 +100,11 @@ coin-flip-game {
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Longer and bouncier transition */
+  transition: transform 1.5s ease-out; /* Adjusted duration for toss animation */
 }
 
 .coin.flipping {
-  animation: coin-flip 1.8s forwards; /* Match the new transition duration */
+  animation: coin-flip 1.5s forwards; /* Match new transition duration */
 }
 
 .heads, .tails {
@@ -138,27 +138,24 @@ coin-flip-game {
 
 @keyframes coin-flip {
   0% {
-    transform: perspective(1000px) rotateY(0deg) rotateX(0deg) rotateZ(0deg) translateY(0px) scale(1);
+    transform: perspective(1000px) rotateY(0deg) translateY(0px);
+    animation-timing-function: ease-out;
   }
-  20% {
-    transform: perspective(1000px) rotateY(720deg) rotateX(180deg) rotateZ(90deg) translateY(-50px) scale(1.1);
-    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out */
+  25% { /* Toss up */
+    transform: perspective(1000px) rotateY(900deg) translateY(-100px) scale(1.05);
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out quad */
   }
-  40% {
-    transform: perspective(1000px) rotateY(1440deg) rotateX(360deg) rotateZ(180deg) translateY(-80px) scale(1.2);
-    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out */
+  50% { /* Mid-air, peak height */
+    transform: perspective(1000px) rotateY(1800deg) translateY(-150px) scale(1.1);
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ease-out quad */
   }
-  60% {
-    transform: perspective(1000px) rotateY(2160deg) rotateX(540deg) rotateZ(270deg) translateY(-50px) scale(1.1);
-    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in */
+  75% { /* Falling down */
+    transform: perspective(1000px) rotateY(2700deg) translateY(-50px) scale(1.05);
+    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in quad */
   }
-  80% {
-    transform: perspective(1000px) rotateY(2880deg) rotateX(720deg) rotateZ(360deg) translateY(-10px) scale(1.05);
-    animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53); /* ease-in */
-  }
-  100% {
-    transform: perspective(1000px) rotateY(3600deg) rotateX(720deg) rotateZ(360deg) translateY(0px) scale(1);
-    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1); /* ease-out */
+  100% { /* Landed */
+    transform: perspective(1000px) rotateY(3600deg) translateY(0px) scale(1);
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1); /* ease-out back */
   }
 }
 
@@ -170,5 +167,10 @@ coin-flip-game {
   font-weight: bold;
   color: var(--primary-color);
   min-height: 1.5em; /* Prevent layout shift */
+}
+
+/* Forcing tails to show up after animation */
+.coin.tails-up {
+  transform: perspective(1000px) rotateY(180deg) !important;
 }
 

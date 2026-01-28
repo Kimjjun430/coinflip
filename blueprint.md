@@ -20,6 +20,10 @@ This document outlines the design and features of the web application.
     - Integrated an open-source coin flip sound effect into `main.js`, which plays when the coin is flipped.
     - Adjusted `setTimeout` duration in `main.js` to `1800ms` to match the new 1.8s CSS animation.
 - **Sound Playback Fix:** Resolved `NotSupportedError` for sound playback by replacing the unreliable online sound source with a local `pickupCoin.wav` file, to be provided and placed by the user.
+- **Refined Animation (Toss Upwards) and Immediate Result Display:**
+    - Reworked `@keyframes coin-flip` in `style.css` to create a new "toss upwards" animation, emphasizing `translateY` for realistic vertical motion and simplifying rotations to focus on `rotateY` for clear spinning. Animation duration set to 1.5s.
+    - Modified `main.js` to eliminate the `setTimeout` for result display; coin flip logic (outcome, balance, history) now executes immediately after animation trigger.
+    - Ensured visual alignment by adding a `.tails-up` class in `style.css` and applying it via `main.js` after the animation, if the outcome is tails.
 
 ## Current Task: None
 ### Plan
