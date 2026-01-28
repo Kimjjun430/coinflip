@@ -338,23 +338,27 @@ class CoinFlipGame extends HTMLElement {
     // Trigger animation
     coin.classList.add('flipping');
 
-    // Determine flip outcome immediately
-    const isHeads = Math.random() < 0.5; // True for heads, false for tails
+    // Determine flip outcome (win/loss) based on random chance
+    const didWinBet = Math.random() < 0.5; // True if the user wins the bet, false if they lose
+
+    // Set coin's landing face based on win/loss: heads for win, tails for loss
+    const isHeads = didWinBet; // If win, coin lands on heads (isHeads = true). If lose, coin lands on tails (isHeads = false).
+
     let resultText, resultColor, historyItem;
     const effectiveBet = betAmount * leverage;
-    const winningSide = 'heads'; // Assuming 'heads' is the winning outcome for now.
+    // The concept of 'winningSide' is now tied directly to the bet outcome, not a pre-chosen side.
 
-          if ((isHeads && winningSide === 'heads') || (!isHeads && winningSide === 'tails')) {
+          if (didWinBet) {
             this.balance += effectiveBet;
-            resultText = `결과: ${isHeads ? '앞면' : '뒷면'}! $${effectiveBet.toLocaleString()} 승리!`;
+            resultText = `결과: 앞면! $${effectiveBet.toLocaleString()} 승리!`; // Explicitly '앞면' for win
             resultColor = 'var(--success-color)';
-            historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? '앞면' : '뒷면' };
+            historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: '앞면' };
             this.saveBalance(); // Save updated balance
         } else {
           this.balance -= effectiveBet;
-          resultText = `결과: ${isHeads ? '앞면' : '뒷면'}! $${effectiveBet.toLocaleString()} 패배!`;
+          resultText = `결과: 뒷면! $${effectiveBet.toLocaleString()} 패배!`; // Explicitly '뒷면' for loss
           resultColor = 'var(--error-color)';
-          historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? '앞면' : '뒷면' };
+          historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: '뒷면' };
           this.saveBalance(); // Save updated balance
         }
     

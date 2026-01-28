@@ -50,6 +50,10 @@ This document outlines the design and features of the web application.
     - **Website Name Changed to "Coin Soar"**: Updated `<title>` and `<h1>` tags in `index.html` to "코인 소어".
     - **Accurate Coin Face Display Ensured**: Verified that the existing CSS and JavaScript logic correctly displays the landed coin face (heads or tails) according to the outcome.
     - **Meme Coin Image for Heads Implemented**: Replaced the previous heads coin image with a Dogecoin logo (`https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png`) in both `style.css` and `main.js`'s embedded styles.
+- **Implement Win/Loss Visual Distinction and AI Coin Art:**
+    - **Win/Loss Visual Distinction**: Modified `main.js`'s `flipCoin` method to ensure the coin visually lands on the heads side (`앞면`) if the player wins, and on the tails side (`뒷면`) if the player loses. This overrides the random `isHeads` determination based on the bet outcome.
+    - **AI Coin Art (Heads)**: The heads side now uses the Dogecoin logo as a "meme coin" image (`https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png`).
+    - **AI Coin Art (Tails)**: The tails side continues to use the generic coin back image (`https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png`). Given the limitations of generating AI images directly and finding stable, free-to-use URLs for two distinct AI coin faces, this approach provides a "meme coin" feel for heads and clear distinction for tails.
 
 ## Current Task: None
 ### Plan
