@@ -13,127 +13,188 @@ class CoinFlipGame extends HTMLElement {
     this.lastClaimDate = ''; // Initialize
 
     this.shadowRoot.innerHTML = `
-              <style>
-                :host { 
-                  --primary-color: #00ffc3; --text-color: #f0f0f0; --error-color: #ff4757;
-                  --success-color: #2ed573; --surface-color-darker: #1e1e1e; --border-radius: 12px;
-                }
-                .game-container { 
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  gap: 24px;
-                }
-                .controls { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 300px; }
-                .control-group { display: flex; flex-direction: column; }
-                label { margin-bottom: 8px; font-size: 0.9em; color: var(--text-color); }
-                input { padding: 12px; border: 1px solid #444; border-radius: var(--border-radius); background-color: var(--surface-color-darker); color: var(--text-color); font-size: 1em; }
-                .coin-container {
-                  width: 150px;
-                  height: 150px;
-                  perspective: 1000px;
-                  cursor: pointer;
-                }
-                .coin {
-                  width: 100%;
-                  height: 100%;
-                  position: relative;
-                  transform-style: preserve-3d;
-                  transition: transform 0.6s ease-out;
-                }
-                .coin.flipping {
-                  animation: coin-flip 0.6s forwards;
-                }
-                .heads, .tails {
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
-                  backface-visibility: hidden;
-                  border-radius: 50%;
-                  background-size: cover;
-                  background-position: center;
-                  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 2em;
-                  font-weight: bold;
-                  color: #fff;
-                  border: 4px solid #ffcc00;
-                }
-                .heads {
-                  background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Indian_5_Rupee_Coin.png');
-                  background-color: #ffcc00;
-                }
-                .tails {
-                  background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png');
-                  background-color: #cccccc;
-                  transform: rotateY(180deg);
-                }
-                @keyframes coin-flip {
-                  0% { transform: rotateY(0deg); }
-                  100% { transform: rotateY(1800deg); } /* 5 full rotations */
-                }
-                .coin-result {
-                  text-align: center;
-                  font-size: 1.8em;
-                  font-weight: bold;
-                  color: var(--primary-color);
-                  min-height: 1.5em;
-                }
-                .history { margin-top: 20px; width: 100%; max-width: 300px; }
-                .history h3 { margin-top: 0; text-align: center; }
-                .history-list { list-style: none; padding: 0; margin: 0; max-height: 150px; overflow-y: auto; }
-                .history-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #333; }
-                .history-item.win .amount { color: var(--success-color); }
-                          .history-item.loss .amount { color: var(--error-color); }
-                          .claim-button {
-                            background-color: var(--primary-color);
-                            color: var(--background-color);
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: var(--border-radius);
-                            font-size: 1em;
-                            font-weight: bold;
-                            cursor: pointer;
-                            transition: background-color 0.3s ease, transform 0.1s ease;
-                            margin-top: 20px;
-                          }
-                          .claim-button:hover {
-                            background-color: #00e6b8; /* Slightly darker primary color */
-                            transform: translateY(-2px);
-                          }
-                          .claim-button:active {
-                            transform: translateY(0);
-                          }
-                                    .claim-button:disabled {
-                                      background-color: #555;
-                                      cursor: not-allowed;
-                                      color: #bbb;
-                                    }
-                                    .restart-button {
-                                      background-color: #f0ad4e; /* Warning-like color */
-                                      color: var(--background-color);
-                                      border: none;
-                                      padding: 12px 24px;
-                                      border-radius: var(--border-radius);
-                                      font-size: 1em;
-                                      font-weight: bold;
-                                      cursor: pointer;
-                                      transition: background-color 0.3s ease, transform 0.1s ease;
-                                      margin-top: 10px; /* Slightly less margin than claim button */
-                                    }
-                                    .restart-button:hover {
-                                      background-color: #ec971f;
-                                      transform: translateY(-2px);
-                                    }
-                                    .restart-button:active {
-                                      transform: translateY(0);
-                                    }
-                                  </style>      <div class="game-container">
+                            <style>
+                              :host {
+                                /* Updated host variables for consistency with main style.css */
+                                --background-color: #0d1117;
+                                --surface-color: #161b22;
+                                --primary-color: #28a745;
+                                --secondary-color: #007bff;
+                                --text-color: #c9d1d9;
+                                --text-secondary: #8b949e;
+                                --error-color: #d12d2d;
+                                --success-color: #28a745;
+                                --warning-color: #ffc107;
+                                --border-color: #30363d;
+                                --border-radius: 8px;
+                                --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+                                --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.4);
+                                --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.2);
+                              }
+                              .game-container {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                gap: 24px;
+                                width: 100%;
+                                max-width: 400px; /* Constrain width for better look */
+                              }
+                              .controls { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+                              .control-group { display: flex; flex-direction: column; }
+                              label { margin-bottom: 8px; font-size: 0.9em; color: var(--text-secondary); }
+                              input {
+                                padding: 12px;
+                                border: 1px solid var(--border-color);
+                                border-radius: var(--border-radius);
+                                background-color: #0d1117; /* Even darker input background */
+                                color: var(--text-color);
+                                font-size: 1em;
+                                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+                              }
+                              input:focus {
+                                  outline: none;
+                                  border-color: var(--primary-color);
+                                  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.4);
+                              }
+                              /* Button styles consolidated with external style for consistency */
+                              button {
+                                border: none;
+                                padding: 12px 24px;
+                                border-radius: var(--border-radius);
+                                font-size: 1em;
+                                font-weight: bold;
+                                cursor: pointer;
+                                transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+                                box-shadow: var(--shadow-light);
+                                margin-top: 20px; /* Apply margin to all buttons */
+                              }
+                              button:hover {
+                                transform: translateY(-2px);
+                                box-shadow: var(--shadow-dark);
+                              }
+                              button:active {
+                                transform: translateY(0);
+                                box-shadow: var(--shadow-light);
+                              }
+                              button:disabled {
+                                background-color: #555;
+                                cursor: not-allowed;
+                                color: #bbb;
+                                box-shadow: none;
+                                transform: none;
+                              }
+              
+                              .claim-button {
+                                background-color: var(--primary-color);
+                                color: var(--background-color);
+                              }
+                              .claim-button:hover {
+                                background-color: #218838; /* Darker green on hover */
+                              }
+              
+                              .coin-container {
+                                width: 180px; /* Consistent with external CSS */
+                                height: 180px;
+                                perspective: 1200px; /* Consistent with external CSS */
+                                margin: 30px auto;
+                                cursor: pointer;
+                              }
+                              .coin {
+                                width: 100%;
+                                height: 100%;
+                                position: relative;
+                                transform-style: preserve-3d;
+                                transition: transform 1.5s ease-out;
+                              }
+                              .coin.flipping {
+                                animation: coin-flip 1.5s forwards;
+                              }
+                              .heads, .tails {
+                                position: absolute;
+                                width: 100%;
+                                height: 100%;
+                                backface-visibility: hidden;
+                                border-radius: 50%;
+                                background-size: cover;
+                                background-position: center;
+                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 2em;
+                                font-weight: bold;
+                                color: #fff;
+                                border: 4px solid rgba(255, 215, 0, 0.7);
+                              }
+                              .heads {
+                                background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Indian_5_Rupee_Coin.png');
+                                background-color: var(--warning-color); /* Use warning-color for vibrant gold */
+                              }
+                              .tails {
+                                background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png');
+                                background-color: #a0a0a0;
+                                transform: rotateY(180deg);
+                              }
+                              @keyframes coin-flip {
+                                0% {
+                                  transform: perspective(1000px) rotateY(0deg) translateY(0px);
+                                  animation-timing-function: ease-out;
+                                }
+                                25% {
+                                  transform: perspective(1000px) rotateY(900deg) translateY(-100px) scale(1.05);
+                                  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                }
+                                50% {
+                                  transform: perspective(1000px) rotateY(1800deg) translateY(-150px) scale(1.1);
+                                  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                                }
+                                75% {
+                                  transform: perspective(1000px) rotateY(2700deg) translateY(-50px) scale(1.05);
+                                  animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+                                }
+                                100% {
+                                  transform: perspective(1000px) rotateY(3600deg) translateY(0px) scale(1);
+                                  animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+                                }
+                              }
+                              .coin-result {
+                                text-align: center;
+                                margin-top: 20px;
+                                font-size: 2em;
+                                font-weight: bold;
+                                color: var(--primary-color);
+                                min-height: 1.5em;
+                                text-shadow: var(--shadow-light);
+                              }
+                              .history { margin-top: 20px; width: 100%; max-width: 300px; }
+                              .history h3 { margin-top: 0; text-align: center; color: var(--text-secondary); }
+                              .history-list {
+                                list-style: none;
+                                padding: 0;
+                                margin: 0;
+                                max-height: 150px;
+                                overflow-y: auto;
+                                border: 1px solid var(--border-color);
+                                border-radius: var(--border-radius);
+                                background-color: #0d1117;
+                              }
+                              .history-item {
+                                display: flex;
+                                justify-content: space-between;
+                                padding: 8px 12px;
+                                border-bottom: 1px solid var(--border-color);
+                                font-size: 0.9em;
+                              }
+                              .history-item:last-child {
+                                border-bottom: none;
+                              }
+                              .history-item.win .amount { color: var(--success-color); font-weight: bold; }
+                              .history-item.loss .amount { color: var(--error-color); font-weight: bold; }
+                            </style>
+                    <div class="game-container">
         <div class="controls">
-          <div class="control-group"><label for="bet-amount">Bet Amount</label><input type="number" id="bet-amount" value="10" /></div>
-          <div class="control-group"><label for="leverage">Leverage</label><input type="number" id="leverage" value="1" min="1" max="100" /></div>
+          <div class="control-group"><label for="bet-amount">베팅 금액</label><input type="number" id="bet-amount" value="10" /></div>
+          <div class="control-group"><label for="leverage">레버리지</label><input type="number" id="leverage" value="1" min="1" max="100" /></div>
         </div>
         <div class="coin-container" id="coin-container">
           <div class="coin" id="coin">
@@ -141,13 +202,12 @@ class CoinFlipGame extends HTMLElement {
             <div class="tails"></div>
           </div>
         </div>
-        <div class="coin-result" id="result-display">Click the coin to flip!</div>
+        <div class="coin-result" id="result-display">코인을 클릭하여 플립하세요!</div>
         <div class="history">
-          <h3>History</h3>
+          <h3>기록</h3>
           <ul class="history-list" id="history-list"></ul>
         </div>
         <button id="claim-button" class="claim-button">Claim Free Balance</button>
-        <button id="restart-button" class="restart-button">Restart Game</button>
       </div>
     `;
 
@@ -165,8 +225,6 @@ class CoinFlipGame extends HTMLElement {
     this.coin.addEventListener('click', () => this.flipCoin());
     this.claimButton = this.shadowRoot.getElementById('claim-button');
     this.claimButton.addEventListener('click', () => this.claimFreeBalance());
-    this.restartButton = this.shadowRoot.getElementById('restart-button'); // Get restart button
-    this.restartButton.addEventListener('click', () => this.restartGame()); // Add event listener
     this.loadFreeClaims(); // Load claims when component connects
     this.updateBalanceDisplay();
     this.updateClaimButton(); // Update button state
@@ -208,13 +266,13 @@ class CoinFlipGame extends HTMLElement {
     if (this.claimButton) {
       if (this.balance >= MIN_BALANCE_FOR_CLAIM) {
         this.claimButton.disabled = true;
-        this.claimButton.textContent = `Balance >= $${MIN_BALANCE_FOR_CLAIM} (No Free Claim)`;
+        this.claimButton.textContent = `잔액이 $${MIN_BALANCE_FOR_CLAIM} 이상입니다 (무료 지급 불가)`;
       } else if (this.dailyClaimsUsed >= MAX_CLAIMS) {
         this.claimButton.disabled = true;
-        this.claimButton.textContent = 'Daily Claims Exhausted';
+        this.claimButton.textContent = '일일 무료 지급 횟수 소진';
       } else {
         this.claimButton.disabled = false;
-        this.claimButton.textContent = `Claim Free $${this.initialBalance.toLocaleString()} (${MAX_CLAIMS - this.dailyClaimsUsed} remaining) - (Balance < $${MIN_BALANCE_FOR_CLAIM})`;
+        this.claimButton.textContent = `무료 $${this.initialBalance.toLocaleString()} 지급 (${MAX_CLAIMS - this.dailyClaimsUsed}회 남음) - (잔액 < $${MIN_BALANCE_FOR_CLAIM})`;
       }
     }
   }
@@ -230,30 +288,12 @@ class CoinFlipGame extends HTMLElement {
       this.saveBalance(); // Save updated balance
       this.updateBalanceDisplay();
       this.updateClaimButton();
-      this.shadowRoot.getElementById('result-display').textContent = `Claimed ${this.initialBalance}! Balance: $${this.balance.toLocaleString()}`;
+      this.shadowRoot.getElementById('result-display').textContent = `무료 지급됨 ${this.initialBalance}! 잔액: $${this.balance.toLocaleString()}`;
       this.shadowRoot.getElementById('result-display').style.color = 'var(--success-color)';
     }
   }
 
-  restartGame() {
-    this.balance = this.initialBalance; // Reset balance to initial
-    localStorage.removeItem('coinFlipBalance'); // Clear persisted balance
-    
-    this.history = []; // Clear history
-    this.updateHistoryList(); // Update history display
 
-    // Optionally reset free claims for a complete fresh start
-    this.dailyClaimsUsed = 0;
-    this.lastClaimDate = this.getTodayDateString(); // Reset last claim date to today
-    localStorage.removeItem('coinFlipDailyClaims');
-    localStorage.removeItem('coinFlipLastClaimDate');
-    this.updateClaimButton(); // Update claim button state
-
-    this.saveBalance(); // Save the initial balance to localStorage
-    this.updateBalanceDisplay(); // Update balance display
-    this.shadowRoot.getElementById('result-display').textContent = 'Game restarted! Balance: $'+this.balance.toLocaleString();
-    this.shadowRoot.getElementById('result-display').style.color = 'var(--primary-color)';
-  }
 
   flipCoin() {
     const betAmountInput = this.shadowRoot.getElementById('bet-amount');
@@ -265,7 +305,7 @@ class CoinFlipGame extends HTMLElement {
     let leverage = parseFloat(leverageInput.value); // Changed to let
 
     if (isNaN(betAmount) || betAmount <= 0) {
-      resultDisplay.textContent = "Invalid bet amount!";
+      resultDisplay.textContent = "유효하지 않은 베팅 금액입니다!";
       resultDisplay.style.color = 'var(--error-color)';
       return;
     }
@@ -273,18 +313,18 @@ class CoinFlipGame extends HTMLElement {
     if (leverage > 100) {
       leverage = 100; // Cap leverage at 100
       leverageInput.value = '100'; // Update input field
-      resultDisplay.textContent = "Leverage capped at 100x!";
+      resultDisplay.textContent = "레버리지는 최대 100배로 제한됩니다!";
       resultDisplay.style.color = 'var(--error-color)';
     }
     if (betAmount * leverage > this.balance) {
-      resultDisplay.textContent = "Not enough balance for this bet and leverage!";
+      resultDisplay.textContent = "베팅 및 레버리지를 위한 잔액이 부족합니다!";
       resultDisplay.style.color = 'var(--error-color)';
       return;
     }
 
     // Disable coin click during flip
     coin.style.pointerEvents = 'none';
-    resultDisplay.textContent = 'Flipping...';
+    resultDisplay.textContent = '플립 중...';
     resultDisplay.style.color = 'var(--primary-color)';
 
     // Play coin flip sound
@@ -306,21 +346,21 @@ class CoinFlipGame extends HTMLElement {
 
           if ((isHeads && winningSide === 'heads') || (!isHeads && winningSide === 'tails')) {
             this.balance += effectiveBet;
-            resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You won $${effectiveBet.toLocaleString()}!`;
+            resultText = `결과: ${isHeads ? '앞면' : '뒷면'}! $${effectiveBet.toLocaleString()} 승리!`;
             resultColor = 'var(--success-color)';
-            historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
+            historyItem = { outcome: 'win', amount: `+$${effectiveBet.toLocaleString()}`, choice: isHeads ? '앞면' : '뒷면' };
             this.saveBalance(); // Save updated balance
         } else {
           this.balance -= effectiveBet;
-          resultText = `It's ${isHeads ? 'Heads' : 'Tails'}! You lost $${effectiveBet.toLocaleString()}!`;
+          resultText = `결과: ${isHeads ? '앞면' : '뒷면'}! $${effectiveBet.toLocaleString()} 패배!`;
           resultColor = 'var(--error-color)';
-          historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? 'HEADS' : 'TAILS' };
+          historyItem = { outcome: 'loss', amount: `-$${effectiveBet.toLocaleString()}`, choice: isHeads ? '앞면' : '뒷면' };
           this.saveBalance(); // Save updated balance
         }
     
             if (this.balance <= 0) {
               this.balance = 0;
-              resultText += ' You are liquidated!';
+              resultText += ' 청산되었습니다!';
               this.saveBalance(); // Save updated balance
               this.updateClaimButton(); // Update claim button if liquidated
             }    

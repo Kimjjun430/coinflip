@@ -42,6 +42,10 @@ This document outlines the design and features of the web application.
     - The free payout is now available when the balance drops below $1000 (previously only when balance was 0).
     - Upon claiming, the balance is reset to the initial $10000.
     - The "Claim Free Balance" button's text and enablement conditions have been updated to clearly explain these new rules.
+- **Refine UI, Localize, and Adjust Game Features:**
+    - **Removed "Restart Game" Feature**: Deleted the restart button HTML, event listener, `restartGame()` method, and associated CSS.
+    - **Beautified Website**: Extensively modified `style.css` and embedded styles in `main.js` to create a more polished, monetization-ready aesthetic, including refined color palette, typography, shadows, gradients, and responsive layout.
+    - **Localized All Text to Korean**: Translated all user-facing text in `index.html` and `main.js` to Korean.
 
 ## Current Task: None
 ### Plan
