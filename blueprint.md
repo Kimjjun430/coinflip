@@ -34,6 +34,14 @@ This document outlines the design and features of the web application.
     - Set the `initialBalance` to `10000`.
     - Updated the maximum leverage to `100x` in the UI.
     - Implemented a daily free payout system, allowing users to claim 1000 balance up to 3 times a day if their balance is 0. This includes a UI button, `localStorage` tracking for claims and date, and automatic daily resets.
+- **Max Leverage Validation and Restart Game Feature:**
+    - Added JavaScript validation in the `flipCoin` method to cap leverage at 100 if a higher value is entered, updating the input field and displaying an error message.
+    - Implemented a "Restart Game" button in the UI with appropriate styling.
+    - Created a `restartGame` method that resets `this.balance` to `this.initialBalance`, clears `'coinFlipBalance'` from `localStorage`, clears game history, resets free claims-related `localStorage` keys, updates the display, and saves the initial balance.
+- **Revised Free Payout Mechanism:**
+    - The free payout is now available when the balance drops below $1000 (previously only when balance was 0).
+    - Upon claiming, the balance is reset to the initial $10000.
+    - The "Claim Free Balance" button's text and enablement conditions have been updated to clearly explain these new rules.
 
 ## Current Task: None
 ### Plan

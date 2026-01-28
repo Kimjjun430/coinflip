@@ -106,12 +106,31 @@ class CoinFlipGame extends HTMLElement {
                           .claim-button:active {
                             transform: translateY(0);
                           }
-                          .claim-button:disabled {
-                            background-color: #555;
-                            cursor: not-allowed;
-                            color: #bbb;
-                          }
-                        </style>      <div class="game-container">
+                                    .claim-button:disabled {
+                                      background-color: #555;
+                                      cursor: not-allowed;
+                                      color: #bbb;
+                                    }
+                                    .restart-button {
+                                      background-color: #f0ad4e; /* Warning-like color */
+                                      color: var(--background-color);
+                                      border: none;
+                                      padding: 12px 24px;
+                                      border-radius: var(--border-radius);
+                                      font-size: 1em;
+                                      font-weight: bold;
+                                      cursor: pointer;
+                                      transition: background-color 0.3s ease, transform 0.1s ease;
+                                      margin-top: 10px; /* Slightly less margin than claim button */
+                                    }
+                                    .restart-button:hover {
+                                      background-color: #ec971f;
+                                      transform: translateY(-2px);
+                                    }
+                                    .restart-button:active {
+                                      transform: translateY(0);
+                                    }
+                                  </style>      <div class="game-container">
         <div class="controls">
           <div class="control-group"><label for="bet-amount">Bet Amount</label><input type="number" id="bet-amount" value="10" /></div>
           <div class="control-group"><label for="leverage">Leverage</label><input type="number" id="leverage" value="1" min="1" max="100" /></div>
@@ -128,6 +147,7 @@ class CoinFlipGame extends HTMLElement {
           <ul class="history-list" id="history-list"></ul>
         </div>
         <button id="claim-button" class="claim-button">Claim Free Balance</button>
+        <button id="restart-button" class="restart-button">Restart Game</button>
       </div>
     `;
 
@@ -145,6 +165,8 @@ class CoinFlipGame extends HTMLElement {
     this.coin.addEventListener('click', () => this.flipCoin());
     this.claimButton = this.shadowRoot.getElementById('claim-button');
     this.claimButton.addEventListener('click', () => this.claimFreeBalance());
+    this.restartButton = this.shadowRoot.getElementById('restart-button'); // Get restart button
+    this.restartButton.addEventListener('click', () => this.restartGame()); // Add event listener
     this.loadFreeClaims(); // Load claims when component connects
     this.updateBalanceDisplay();
     this.updateClaimButton(); // Update button state
@@ -181,35 +203,56 @@ class CoinFlipGame extends HTMLElement {
   }
 
   updateClaimButton() {
+    const MIN_BALANCE_FOR_CLAIM = 1000;
     const MAX_CLAIMS = 3;
     if (this.claimButton) {
-      if (this.balance > 0) {
+      if (this.balance >= MIN_BALANCE_FOR_CLAIM) {
         this.claimButton.disabled = true;
-        this.claimButton.textContent = 'Balance > 0 (No Free Claim)';
+        this.claimButton.textContent = `Balance >= $${MIN_BALANCE_FOR_CLAIM} (No Free Claim)`;
       } else if (this.dailyClaimsUsed >= MAX_CLAIMS) {
         this.claimButton.disabled = true;
         this.claimButton.textContent = 'Daily Claims Exhausted';
       } else {
         this.claimButton.disabled = false;
-        this.claimButton.textContent = `Claim Free Balance (${MAX_CLAIMS - this.dailyClaimsUsed} remaining)`;
+        this.claimButton.textContent = `Claim Free $${this.initialBalance.toLocaleString()} (${MAX_CLAIMS - this.dailyClaimsUsed} remaining) - (Balance < $${MIN_BALANCE_FOR_CLAIM})`;
       }
     }
   }
 
   claimFreeBalance() {
-    const FREE_AMOUNT = 1000;
+    const MIN_BALANCE_FOR_CLAIM = 1000;
     const MAX_CLAIMS = 3;
 
-    if (this.balance === 0 && this.dailyClaimsUsed < MAX_CLAIMS) {
-      this.balance += FREE_AMOUNT;
+    if (this.balance < MIN_BALANCE_FOR_CLAIM && this.dailyClaimsUsed < MAX_CLAIMS) {
+      this.balance = this.initialBalance; // Reset to initial balance (10000)
       this.dailyClaimsUsed++;
       this.saveFreeClaims(); // Save updated claims
       this.saveBalance(); // Save updated balance
       this.updateBalanceDisplay();
       this.updateClaimButton();
-      this.shadowRoot.getElementById('result-display').textContent = `Claimed ${FREE_AMOUNT}! Balance: $${this.balance.toLocaleString()}`;
+      this.shadowRoot.getElementById('result-display').textContent = `Claimed ${this.initialBalance}! Balance: $${this.balance.toLocaleString()}`;
       this.shadowRoot.getElementById('result-display').style.color = 'var(--success-color)';
     }
+  }
+
+  restartGame() {
+    this.balance = this.initialBalance; // Reset balance to initial
+    localStorage.removeItem('coinFlipBalance'); // Clear persisted balance
+    
+    this.history = []; // Clear history
+    this.updateHistoryList(); // Update history display
+
+    // Optionally reset free claims for a complete fresh start
+    this.dailyClaimsUsed = 0;
+    this.lastClaimDate = this.getTodayDateString(); // Reset last claim date to today
+    localStorage.removeItem('coinFlipDailyClaims');
+    localStorage.removeItem('coinFlipLastClaimDate');
+    this.updateClaimButton(); // Update claim button state
+
+    this.saveBalance(); // Save the initial balance to localStorage
+    this.updateBalanceDisplay(); // Update balance display
+    this.shadowRoot.getElementById('result-display').textContent = 'Game restarted! Balance: $'+this.balance.toLocaleString();
+    this.shadowRoot.getElementById('result-display').style.color = 'var(--primary-color)';
   }
 
   flipCoin() {
@@ -219,12 +262,19 @@ class CoinFlipGame extends HTMLElement {
     const coin = this.shadowRoot.getElementById('coin');
 
     const betAmount = parseFloat(betAmountInput.value);
-    const leverage = parseFloat(leverageInput.value);
+    let leverage = parseFloat(leverageInput.value); // Changed to let
 
     if (isNaN(betAmount) || betAmount <= 0) {
       resultDisplay.textContent = "Invalid bet amount!";
       resultDisplay.style.color = 'var(--error-color)';
       return;
+    }
+    // Enforce max leverage
+    if (leverage > 100) {
+      leverage = 100; // Cap leverage at 100
+      leverageInput.value = '100'; // Update input field
+      resultDisplay.textContent = "Leverage capped at 100x!";
+      resultDisplay.style.color = 'var(--error-color)';
     }
     if (betAmount * leverage > this.balance) {
       resultDisplay.textContent = "Not enough balance for this bet and leverage!";
