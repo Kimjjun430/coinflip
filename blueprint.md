@@ -19,6 +19,7 @@ This document outlines the design and features of the web application.
     - Confirmed distinct background colors (`#ffcc00` for heads, `#cccccc` for tails) are applied in `style.css`.
     - Integrated an open-source coin flip sound effect into `main.js`, which plays when the coin is flipped.
     - Adjusted `setTimeout` duration in `main.js` to `1800ms` to match the new 1.8s CSS animation.
+- **Sound Playback Fix:** Resolved `NotSupportedError` for sound playback by replacing the unreliable online sound source with a local `pickupCoin.wav` file, to be provided and placed by the user.
 
 ## Current Task: None
 ### Plan

@@ -110,7 +110,7 @@ class CoinFlipGame extends HTMLElement {
     // this.downEarningsElement = document.getElementById('down-earnings');
 
     // Load coin sound effect
-    this.coinSound = new Audio('https://freesound.org/data/previews/165/165415_291039-lq.mp3'); // Using the sourced sound effect
+    this.coinSound = new Audio('./audio/pickupCoin.wav'); // Using the local sound effect provided by the user
   }
 
   connectedCallback() {
