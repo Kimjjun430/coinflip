@@ -5,10 +5,12 @@ class CoinFlipGame extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    this.initialBalance = 1000;
+    this.initialBalance = 10000; // Updated initial balance
     // Load balance from localStorage, or use initialBalance if not found
     this.balance = parseFloat(localStorage.getItem('coinFlipBalance')) || this.initialBalance;
     this.history = [];
+    this.dailyClaimsUsed = 0; // Initialize
+    this.lastClaimDate = ''; // Initialize
 
     this.shadowRoot.innerHTML = `
               <style>
@@ -84,9 +86,32 @@ class CoinFlipGame extends HTMLElement {
                 .history-list { list-style: none; padding: 0; margin: 0; max-height: 150px; overflow-y: auto; }
                 .history-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #333; }
                 .history-item.win .amount { color: var(--success-color); }
-                .history-item.loss .amount { color: var(--error-color); }
-              </style>
-      <div class="game-container">
+                          .history-item.loss .amount { color: var(--error-color); }
+                          .claim-button {
+                            background-color: var(--primary-color);
+                            color: var(--background-color);
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: var(--border-radius);
+                            font-size: 1em;
+                            font-weight: bold;
+                            cursor: pointer;
+                            transition: background-color 0.3s ease, transform 0.1s ease;
+                            margin-top: 20px;
+                          }
+                          .claim-button:hover {
+                            background-color: #00e6b8; /* Slightly darker primary color */
+                            transform: translateY(-2px);
+                          }
+                          .claim-button:active {
+                            transform: translateY(0);
+                          }
+                          .claim-button:disabled {
+                            background-color: #555;
+                            cursor: not-allowed;
+                            color: #bbb;
+                          }
+                        </style>      <div class="game-container">
         <div class="controls">
           <div class="control-group"><label for="bet-amount">Bet Amount</label><input type="number" id="bet-amount" value="10" /></div>
           <div class="control-group"><label for="leverage">Leverage</label><input type="number" id="leverage" value="1" min="1" max="100" /></div>
@@ -102,6 +127,7 @@ class CoinFlipGame extends HTMLElement {
           <h3>History</h3>
           <ul class="history-list" id="history-list"></ul>
         </div>
+        <button id="claim-button" class="claim-button">Claim Free Balance</button>
       </div>
     `;
 
@@ -117,11 +143,73 @@ class CoinFlipGame extends HTMLElement {
   connectedCallback() {
     this.coin = this.shadowRoot.getElementById('coin');
     this.coin.addEventListener('click', () => this.flipCoin());
+    this.claimButton = this.shadowRoot.getElementById('claim-button');
+    this.claimButton.addEventListener('click', () => this.claimFreeBalance());
+    this.loadFreeClaims(); // Load claims when component connects
     this.updateBalanceDisplay();
+    this.updateClaimButton(); // Update button state
   }
 
   updateBalanceDisplay() {
     if (this.balanceElement) this.balanceElement.textContent = `$${this.balance.toLocaleString()}`;
+  }
+
+  getTodayDateString() {
+    const today = new Date();
+    return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  }
+
+  loadFreeClaims() {
+    const storedClaims = localStorage.getItem('coinFlipDailyClaims');
+    const storedDate = localStorage.getItem('coinFlipLastClaimDate');
+    const today = this.getTodayDateString();
+
+    if (storedDate === today) {
+      this.dailyClaimsUsed = parseInt(storedClaims || '0', 10);
+      this.lastClaimDate = storedDate;
+    } else {
+      // New day, reset claims
+      this.dailyClaimsUsed = 0;
+      this.lastClaimDate = today;
+      this.saveFreeClaims();
+    }
+  }
+
+  saveFreeClaims() {
+    localStorage.setItem('coinFlipDailyClaims', this.dailyClaimsUsed.toString());
+    localStorage.setItem('coinFlipLastClaimDate', this.lastClaimDate);
+  }
+
+  updateClaimButton() {
+    const MAX_CLAIMS = 3;
+    if (this.claimButton) {
+      if (this.balance > 0) {
+        this.claimButton.disabled = true;
+        this.claimButton.textContent = 'Balance > 0 (No Free Claim)';
+      } else if (this.dailyClaimsUsed >= MAX_CLAIMS) {
+        this.claimButton.disabled = true;
+        this.claimButton.textContent = 'Daily Claims Exhausted';
+      } else {
+        this.claimButton.disabled = false;
+        this.claimButton.textContent = `Claim Free Balance (${MAX_CLAIMS - this.dailyClaimsUsed} remaining)`;
+      }
+    }
+  }
+
+  claimFreeBalance() {
+    const FREE_AMOUNT = 1000;
+    const MAX_CLAIMS = 3;
+
+    if (this.balance === 0 && this.dailyClaimsUsed < MAX_CLAIMS) {
+      this.balance += FREE_AMOUNT;
+      this.dailyClaimsUsed++;
+      this.saveFreeClaims(); // Save updated claims
+      this.saveBalance(); // Save updated balance
+      this.updateBalanceDisplay();
+      this.updateClaimButton();
+      this.shadowRoot.getElementById('result-display').textContent = `Claimed ${FREE_AMOUNT}! Balance: $${this.balance.toLocaleString()}`;
+      this.shadowRoot.getElementById('result-display').style.color = 'var(--success-color)';
+    }
   }
 
   flipCoin() {
@@ -180,12 +268,12 @@ class CoinFlipGame extends HTMLElement {
           this.saveBalance(); // Save updated balance
         }
     
-        if (this.balance <= 0) {
-          this.balance = 0;
-          resultText += ' You are liquidated!';
-          this.saveBalance(); // Save updated balance
-        }
-    
+            if (this.balance <= 0) {
+              this.balance = 0;
+              resultText += ' You are liquidated!';
+              this.saveBalance(); // Save updated balance
+              this.updateClaimButton(); // Update claim button if liquidated
+            }    
         // Display results immediately
         resultDisplay.textContent = resultText;
         resultDisplay.style.color = resultColor;

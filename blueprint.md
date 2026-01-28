@@ -30,6 +30,10 @@ This document outlines the design and features of the web application.
 - **Persist User Balance Across Sessions:**
     - Implemented logic in the `CoinFlipGame` constructor to load the user's balance from `localStorage` using the key `'coinFlipBalance'`, falling back to the `initialBalance` if no saved data is found.
     - Added a `saveBalance()` method that stores the current `this.balance` in `localStorage` and integrated calls to this method whenever the balance is updated (after a win, loss, or liquidation).
+- **Game Economy Features:**
+    - Set the `initialBalance` to `10000`.
+    - Updated the maximum leverage to `100x` in the UI.
+    - Implemented a daily free payout system, allowing users to claim 1000 balance up to 3 times a day if their balance is 0. This includes a UI button, `localStorage` tracking for claims and date, and automatic daily resets.
 
 ## Current Task: None
 ### Plan
