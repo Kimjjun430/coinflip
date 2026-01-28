@@ -376,17 +376,16 @@ class CoinFlipGame extends HTMLElement {
         this.updateHistoryList();
         this.updateBalanceDisplay();
     
-        // Visually set the coin to the determined outcome immediately
-        if (!isHeads) {
-          coin.classList.add('tails-up');
-        } else {
-          coin.classList.remove('tails-up'); // Ensure it's not present if heads
-        }
-        coin.style.pointerEvents = 'auto'; // Re-enable coin click immediately
-    
         // Clean up animation class after animation ends
         const handleAnimationEnd = () => {
           coin.classList.remove('flipping');
+          // Explicitly set the final visual orientation
+          if (isHeads) { // Win: Show heads
+            coin.style.transform = 'perspective(1000px) rotateY(0deg)'; // Final state for heads
+          } else { // Loss: Show tails
+            coin.style.transform = 'perspective(1000px) rotateY(180deg)'; // Final state for tails
+          }
+          coin.style.pointerEvents = 'auto'; // Re-enable coin click
           coin.removeEventListener('animationend', handleAnimationEnd);
         };
         coin.addEventListener('animationend', handleAnimationEnd);

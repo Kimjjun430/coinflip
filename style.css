@@ -191,8 +191,3 @@ coin-flip-game {
   min-height: 1.5em; /* Prevent layout shift */
   text-shadow: var(--shadow-light);
 }
-
-/* Forcing tails to show up after animation */
-.coin.tails-up {
-  transform: perspective(1000px) rotateY(180deg) !important;
-}

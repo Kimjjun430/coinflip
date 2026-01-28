@@ -54,6 +54,9 @@ This document outlines the design and features of the web application.
     - **Win/Loss Visual Distinction**: Modified `main.js`'s `flipCoin` method to ensure the coin visually lands on the heads side (`앞면`) if the player wins, and on the tails side (`뒷면`) if the player loses. This overrides the random `isHeads` determination based on the bet outcome.
     - **AI Coin Art (Heads)**: The heads side now uses the Dogecoin logo as a "meme coin" image (`https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png`).
     - **AI Coin Art (Tails)**: The tails side continues to use the generic coin back image (`https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png`). Given the limitations of generating AI images directly and finding stable, free-to-use URLs for two distinct AI coin faces, this approach provides a "meme coin" feel for heads and clear distinction for tails.
+- **Fix Coin Face Display Bug:**
+    - **Refined `main.js` (`flipCoin` method)**: Removed the `tails-up` class application logic. Instead, directly set `coin.style.transform` within the `animationend` listener to explicitly control the final rotation: `rotateY(0deg)` for heads (win) and `rotateY(180deg)` for tails (loss).
+    - **Removed `.coin.tails-up` CSS**: This CSS class was removed from `style.css` (and verified it was not present in embedded `main.js` styles) as it is no longer needed.
 
 ## Current Task: None
 ### Plan
