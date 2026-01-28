@@ -65,34 +65,12 @@ This document outlines the design and features of the web application.
     - **Optimized `main.js`**: Ensured removal of unused properties (`this.dailyClaimsUsed`, `this.lastClaimDate`) and methods (`getTodayDateString`, `loadFreeClaims`, `saveFreeClaims`). Reviewed existing logic for redundancy and maintained consistent formatting.
     - **Optimized `style.css` and Embedded Styles**: Removed the now-unused `.coin.tails-up` CSS rule from `style.css`. Verified no other redundant or unused styles in `style.css` and the embedded styles within `main.js`. Ensured consistent formatting.
     - **Reviewed `index.html`**: Confirmed `index.html` remains minimal and clean.
+- **Implement Cyberpunk UI with Tailwind (Design Overhaul):**
+    - **Tailwind CSS Integrated (CDN)**: Tailwind CSS CDN link and custom config (for colors and fonts) added to `index.html`.
+    - **HTML Structure Overhauled**: `index.html` restructured into Hero, Features (game component), CTA, and Footer sections with initial global Tailwind dark mode and text color classes.
+    - **`style.css` Redesigned**: Overhauled global styles to embrace the cyberpunk dark UI and neon aesthetic, including custom scrollbar, updated color palette variables, stronger text shadows, and subtle animation keyframes (`neon-glow-blue`, `neon-glow-green`, `subtle-flicker`).
+    - **Embedded Styles Redesigned in `main.js`**: Updated the `<style>` block within `shadowRoot.innerHTML` to align with the new design language, ensuring internal components maintain the cyberpunk aesthetic and responsiveness, including consistent `coin` transitions and `flipping` animations.
 
-## Current Task: Implement Cyberpunk UI with Tailwind (Design Overhaul)
-### Feedback Received
-The user requests a complete redesign of the website into a "네온 컬러와 다크 UI 기반의 사이버펑크 스타일 반응형 웹사이트" (Cyberpunk style based on neon colors and dark UI responsive website) using "Tailwind로" (with Tailwind CSS), including "글리치/네온 애니메이션" (glitch/neon animations) and a "Hero/Features/CTA/Footer 구조" (Hero/Features/CTA/Footer structure). The goal is a "고급지고 트렌디하게" (luxurious and trendy) look, like a "진짜 수익형 웹사이트" (real profit-making website).
-
-### Proposed Approach (Addressing Limitations)
-Due to current environment limitations (inability to install `npm` packages or run a complex build process directly for a fully customized Tailwind setup), the following approach will be taken:
-
-1.  **Tailwind CSS Integration (CDN)**: Tailwind CSS will be integrated via its CDN link. This allows basic Tailwind utility classes but limits custom configuration and JIT compilation capabilities.
-2.  **Extensive Custom CSS**: A significant portion of the cyberpunk/neon aesthetic, responsive design, and animations will be achieved through direct, custom CSS in `style.css` and embedded styles within `main.js`. This will simulate Tailwind's benefits where direct utility classes are not sufficient or easily replicable with the CDN.
-3.  **HTML Structure Overhaul**: `index.html` will be restructured to incorporate Hero, Features (housing the game component), CTA, and Footer sections.
-4.  **Aesthetic Details**: Focus on dark backgrounds, vibrant neon accent colors, subtle gradients, atmospheric typography, enhanced shadows, and visually striking glitch/neon animations (e.g., glowing text/borders, subtle flickering effects).
-5.  **Responsiveness**: Ensure the design adapts gracefully to various screen sizes.
-6.  **Localization Review**: All new UI elements and text introduced during the redesign will be in Korean.
-
-### Plan Steps
-1. Update `blueprint.md` with this detailed task and proposed approach.
-2. **Integrate Tailwind CSS (CDN)**: Add the Tailwind CSS CDN link to `index.html`.
-3. **Modify `index.html` Structure**:
-    - Add the main structural elements for Hero, Features (where the game component `coin-flip-game` will be placed), CTA, and Footer.
-    - Apply initial global Tailwind dark mode and text color classes.
-4. **Redesign `style.css` (Main Stylesheet)**:
-    - Overhaul existing global styles (body, header, main) to embrace the cyberpunk dark UI and neon aesthetic.
-    - Define new custom properties for advanced neon effects, glitch, and subtle animations.
-    - Implement responsive design principles for the overall layout.
-5.  **Redesign Embedded Styles in `main.js`**:
-    - Update the `<style>` block within `shadowRoot.innerHTML` to align with the new design language, ensuring the custom element's internal components (inputs, buttons, coin, history) maintain the cyberpunk aesthetic and responsiveness.
-6.  **Implement Glitch/Neon Animations**:
-    - Add CSS `@keyframes` for subtle glitch effects, neon glows, or flickering lights to elements as appropriate (e.g., text, borders, buttons).
-7.  **Review `main.js` for Integration**: Ensure the game logic continues to function seamlessly within the new UI, and any dynamic content updates adhere to the new styling.
-8.  **Thorough Testing**: Test all game functionalities, the new design across devices, and the implemented animations.
+## Current Task: None
+### Plan
+All current tasks are complete.
