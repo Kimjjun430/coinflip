@@ -127,7 +127,7 @@ class CoinFlipGame extends HTMLElement {
                                 border: 4px solid rgba(255, 215, 0, 0.7);
                               }
                               .heads {
-                                background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Indian_5_Rupee_Coin.png');
+                                background-image: url('https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png'); /* Dogecoin Meme Coin image */
                                 background-color: var(--warning-color); /* Use warning-color for vibrant gold */
                               }
                               .tails {

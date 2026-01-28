@@ -46,6 +46,10 @@ This document outlines the design and features of the web application.
     - **Removed "Restart Game" Feature**: Deleted the restart button HTML, event listener, `restartGame()` method, and associated CSS.
     - **Beautified Website**: Extensively modified `style.css` and embedded styles in `main.js` to create a more polished, monetization-ready aesthetic, including refined color palette, typography, shadows, gradients, and responsive layout.
     - **Localized All Text to Korean**: Translated all user-facing text in `index.html` and `main.js` to Korean.
+- **Update Branding, Visual Accuracy, and Coin Art:**
+    - **Website Name Changed to "Coin Soar"**: Updated `<title>` and `<h1>` tags in `index.html` to "코인 소어".
+    - **Accurate Coin Face Display Ensured**: Verified that the existing CSS and JavaScript logic correctly displays the landed coin face (heads or tails) according to the outcome.
+    - **Meme Coin Image for Heads Implemented**: Replaced the previous heads coin image with a Dogecoin logo (`https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png`) in both `style.css` and `main.js`'s embedded styles.
 
 ## Current Task: None
 ### Plan

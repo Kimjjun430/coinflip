@@ -148,8 +148,8 @@ coin-flip-game {
 }
 
 .heads {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/2f/Indian_5_Rupee_Coin.png'); /* Placeholder Heads image */
-  background-color: #ffc107; /* More vibrant gold */
+  background-image: url('https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png'); /* Dogecoin Meme Coin image */
+  background-color: #ffc107; /* More vibrant gold, matching Dogecoin color */
 }
 
 .tails {
