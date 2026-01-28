@@ -10,10 +10,11 @@ This document outlines the design and features of the web application.
     - Implemented client-side coin flip logic with random outcome (Heads/Tails).
     - Integrated CSS for coin styling, 3D flip animation, and result display.
     - Updated balance tracking and history based on coin flip results.
+- **Enhanced Coin Flip Animation and Images:**
+    - Sourced widely available coin images for heads and tails (Wikimedia Commons).
+    - Modified `style.css` to use these images and updated the `@keyframes coin-flip` for a more dynamic animation, including increased rotations, vertical movement, and scaling during the flip.
+    - Adjusted `main.js`'s `setTimeout` duration to synchronize with the new animation.
 
-## Current Task: Implement Coin Flip Feature
+## Current Task: None
 ### Plan
-1. Create `blueprint.md` if it doesn't exist and add this section.
-2. Modify `index.html` to include a coin container and a result display.
-3. Add CSS in `style.css` for coin styling and flip animation.
-4. Implement JavaScript in `main.js` for coin flip logic, image handling, event listeners, and result updates.
+All current tasks are complete.

@@ -198,7 +198,7 @@ class CoinFlipGame extends HTMLElement {
       // Re-enable coin click after animation
       coin.style.pointerEvents = 'auto';
 
-    }, 600); // Duration of the CSS animation
+    }, 1200); // Duration of the CSS animation
   }
 
   updateHistoryList() {
