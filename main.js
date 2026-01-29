@@ -1,5 +1,3 @@
-
-
 class CoinFlipGame extends HTMLElement {
   constructor() {
     super();
@@ -375,3 +373,28 @@ class CoinFlipGame extends HTMLElement {
       }}
 
 customElements.define('coin-flip-game', CoinFlipGame);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('.fade-in-section');
+
+    if (!sections.length) {
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.1 // 10% of the element is visible
+    });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+});
