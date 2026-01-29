@@ -112,6 +112,43 @@
           </a>
         </div>
       </section>
+
+      <!-- Partnership Inquiry Section -->
+      <section id="contact" class="py-12 mb-8 bg-darkSurface rounded-lg shadow-xl border border-neonBlue/30">
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-cyberpunk text-center text-neonBlue mb-8 drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
+            제휴 문의
+          </h2>
+          <form action="https://formspree.io/f/xqebevgk" method="POST" class="max-w-xl mx-auto space-y-6">
+            <div>
+              <label for="name" class="block text-neonGreen text-sm font-bold mb-2">이름:</label>
+              <input type="text" id="name" name="name" required
+                     class="shadow appearance-none border border-neonPurple rounded w-full py-3 px-4 bg-darkBg text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-neonBlue transition-all duration-200">
+            </div>
+            <div>
+              <label for="email" class="block text-neonGreen text-sm font-bold mb-2">이메일:</label>
+              <input type="email" id="email" name="email" required
+                     class="shadow appearance-none border border-neonPurple rounded w-full py-3 px-4 bg-darkBg text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-neonBlue transition-all duration-200">
+            </div>
+            <div>
+              <label for="company" class="block text-neonGreen text-sm font-bold mb-2">회사/단체 (선택 사항):</label>
+              <input type="text" id="company" name="company"
+                     class="shadow appearance-none border border-neonPurple rounded w-full py-3 px-4 bg-darkBg text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-neonBlue transition-all duration-200">
+            </div>
+            <div>
+              <label for="message" class="block text-neonGreen text-sm font-bold mb-2">메시지:</label>
+              <textarea id="message" name="message" rows="5" required
+                        class="shadow appearance-none border border-neonPurple rounded w-full py-3 px-4 bg-darkBg text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-neonBlue transition-all duration-200 resize-y"></textarea>
+            </div>
+            <div class="flex items-center justify-center">
+              <button type="submit"
+                      class="bg-neonBlue text-darkBg px-8 py-4 rounded-full font-bold text-lg uppercase hover:bg-neonGreen transition-all duration-300 transform hover:scale-105 shadow-neon focus:outline-none focus:shadow-outline">
+                문의 보내기
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
     </div>
 
     <!-- Footer -->
