@@ -44,7 +44,7 @@
   --font-family-primary: 'Inter', sans-serif;
   --font-family-cyber: 'Press Start 2P', cursive;
 
-  --glow-intensity: 0.8; /* Control glow strength */
+  --glow-intensity: 0.5; /* Control glow strength */
   --neon-shadow-blue: 0 0 5px var(--neonBlue), 0 0 10px var(--neonBlue), 0 0 20px var(--neonBlue), 0 0 40px rgba(0, 240, 255, var(--glow-intensity));
   --neon-shadow-green: 0 0 5px var(--neonGreen), 0 0 10px var(--neonGreen), 0 0 20px var(--neonGreen), 0 0 40px rgba(57, 255, 20, var(--glow-intensity));
   --neon-shadow-purple: 0 0 5px var(--neonPurple), 0 0 10px var(--neonPurple), 0 0 20px var(--neonPurple), 0 0 40px rgba(163, 46, 255, var(--glow-intensity));

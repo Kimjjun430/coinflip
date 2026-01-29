@@ -204,6 +204,9 @@ class CoinFlipGame extends HTMLElement {
           <ul class="history-list" id="history-list"></ul>
         </div>
         <button id="claim-button" class="claim-button">Claim Free Balance</button>
+        <p class="text-sm text-gray-400 mt-2 text-center">
+          <span style="color:var(--neonGreen);">참고:</span> 무료 잔액 지급이 간헐적으로 작동하지 않을 경우, 페이지를 새로고침(F5) 해주세요.
+        </p>
       </div>
     `;
 
