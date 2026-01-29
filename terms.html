@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이용약관 - 코인 소어</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              neonBlue: '#00F0FF',
+              neonPurple: '#8A2BE2',
+              neonGreen: '#39FF14',
+              darkBg: '#080A0C',
+              darkSurface: '#12161A',
+            },
+            fontFamily: {
+              cyberpunk: ['"Press Start 2P"', 'cursive'],
+              sans: ['Inter', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-darkBg text-gray-200 font-sans">
+    <div class="container mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <header class="text-center py-8 mb-8 bg-darkSurface rounded-lg shadow-lg border-b-2 border-neonPurple">
+            <h1 class="text-3xl md:text-4xl font-cyberpunk text-neonGreen drop-shadow-[0_0_10px_rgba(57,255,20,0.7)]">이용약관</h1>
+        </header>
+
+        <!-- Main Content -->
+        <main class="bg-darkSurface rounded-lg shadow-xl p-6 md:p-10 border border-neonGreen/30 text-gray-300">
+            <p class="mb-4">최종 수정일: 2026년 1월 29일</p>
+
+            <p class="mb-6">본 약관은 코인 소어(이하 '서비스')의 이용 조건 및 절차에 관한 사항을 규정합니다. 서비스를 이용하는 모든 사용자(이하 '사용자')는 본 약관에 동의하는 것으로 간주됩니다.</p>
+
+            <h2 class="text-2xl font-cyberpunk text-neonBlue mb-4">1. 서비스의 제공</h2>
+            <p class="mb-6">'코인 소어'는 웹 기반 엔터테인먼트 서비스로, 사용자는 가상의 재화(사이버-크레딧)를 이용하여 코인 플립 게임을 즐길 수 있습니다. 본 서비스는 별도의 회원가입 없이 누구나 이용할 수 있습니다.</p>
+
+            <h2 class="text-2xl font-cyberpunk text-neonBlue mb-4">2. 사용자의 의무</h2>
+            <p class="mb-6">사용자는 다음 행위를 해서는 안 됩니다.
+                <ul class="list-disc list-inside space-y-2 mt-2 pl-4">
+                    <li>서비스의 비정상적인 이용: 매크로, 스크립트, 또는 기타 자동화된 방법을 사용하여 서비스를 조작하는 행위.</li>
+                    <li>데이터 조작: 브라우저의 개발자 도구 등을 이용하여 로컬에 저장된 게임 데이터를 임의로 변경하여 게임의 공정성을 해치는 행위.</li>
+                    <li>법률 위반: 본 서비스를 이용하여 법률이나 사회 질서에 위배되는 행위를 하는 것.</li>
+                </ul>
+            </p>
+
+            <h2 class="text-2xl font-cyberpunk text-neonBlue mb-4">3. 지적 재산권</h2>
+            <p class="mb-6">본 서비스의 디자인, 텍스트, 그래픽, 로고, 게임 로직 등 모든 콘텐츠의 지적 재산권은 '코인 소어'에 있습니다. 사용자는 비상업적이고 개인적인 용도를 제외하고는 '코인 소어'의 사전 동의 없이 콘텐츠를 복제, 수정, 배포할 수 없습니다.</p>
+            
+            <h2 class="text-2xl font-cyberpunk text-neonBlue mb-4">4. 책임의 한계</h2>
+            <p class="mb-6">'코인 소어'는 가상의 재화를 사용하는 순수한 오락용 서비스입니다. 게임 결과로 인한 가상 재화의 손실에 대해 '코인 소어'는 어떠한 책임도 지지 않습니다. 또한, 서비스는 사전 공지 없이 중단되거나 변경될 수 있으며, 이에 대해 저희는 책임을 지지 않습니다.</p>
+
+            <h2 class="text-2xl font-cyberpunk text-neonBlue mb-4">5. 약관의 변경</h2>
+            <p class="mb-6">본 약관은 관련 법령의 변경이나 서비스의 정책 변경에 따라 수정될 수 있습니다. 약관이 변경될 경우, 서비스 내에 공지하겠습니다.</p>
+
+            <div class="text-center mt-12">
+                <a href="index.html" class="bg-neonBlue text-darkBg px-8 py-4 rounded-full font-bold text-lg uppercase hover:bg-neonGreen transition-all duration-300 transform hover:scale-105 shadow-neon">
+                    홈으로 돌아가기
+                </a>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer class="text-center py-6 mt-8">
+            <p class="text-sm text-gray-500">&copy; 2026 Coin Soar. 모든 권리 보유.</p>
+        </footer>
+    </div>
+</body>
+</html>
