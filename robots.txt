@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://coin-soar.web.app/sitemap.xml
+Sitemap: https://coinflip-2mb.pages.dev/sitemap.xml

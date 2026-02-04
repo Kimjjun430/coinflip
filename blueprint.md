@@ -1,76 +1,60 @@
-# Project Blueprint
+# blueprint.md
 
-## Overview
-This document outlines the design and features of the web application.
+## 프로젝트 개요
 
-## Implemented Features
-- Initial setup for a framework-less web project.
-- **Coin Flip Feature:** Transformed the previous betting mechanism into an interactive coin flip game.
-    - Replaced "Up/Down" buttons with a clickable 3D animated coin.
-    - Implemented client-side coin flip logic with random outcome (Heads/Tails).
-    - Integrated CSS for coin styling, 3D flip animation, and result display.
-    - Updated balance tracking and history based on coin flip results.
-- **Enhanced Coin Flip Animation and Images:**
-    - Sourced widely available coin images for heads and tails (Wikimedia Commons).
-    - Modified `style.css` to use these images and updated the `@keyframes coin-flip` for a more dynamic animation, including increased rotations, vertical movement, and scaling during the flip.
-    - Adjusted `main.js`'s `setTimeout` duration to synchronize with the new animation.
-- **flipsimu.com-like Animation, Distinct Colors & Sound Integration:**
-    - Modified `style.css` to further enhance the `@keyframes coin-flip` for a more complex and realistic 3D animation, inspired by `flipsimu.com`, introducing `rotateX` and `rotateZ` for tumbling effects, more keyframe steps, and adjusted `cubic-bezier` timing functions.
-    - Confirmed distinct background colors (`#ffcc00` for heads, `#cccccc` for tails) are applied in `style.css`.
-    - Integrated an open-source coin flip sound effect into `main.js`, which plays when the coin is flipped.
-    - Adjusted `setTimeout` duration in `main.js` to `1800ms` to match the new 1.8s CSS animation.
-- **Sound Playback Fix:** Resolved `NotSupportedError` for sound playback by replacing the unreliable online sound source with a local `pickupCoin.wav` file, to be provided and placed by the user.
-- **Refined Animation (Toss Upwards) and Immediate Result Display:**
-    - Reworked `@keyframes coin-flip` in `style.css` to create a new "toss upwards" animation, emphasizing `translateY` for realistic vertical motion and simplifying rotations to focus on `rotateY` for clear spinning. Animation duration set to 1.5s.
-    - Modified `main.js` to eliminate the `setTimeout` for result display; coin flip logic (outcome, balance, history) now executes immediately after animation trigger.
-    - Ensured visual alignment by adding a `.tails-up` class in `style.css` and applying it via `main.js` after the animation, if the outcome is tails.
-- **Immediate Coin Clickability:**
-    - Modified `main.js` to enable immediate re-clickability of the coin after a flip. `coin.style.pointerEvents = 'auto';` and the `tails-up` class application logic are now executed immediately after the result display.
-    - Replaced the `setTimeout` for animation cleanup with an `animationend` event listener on the coin element, ensuring the `flipping` class is removed without delaying user interaction.
-- **Persist User Balance Across Sessions:**
-    - Implemented logic in the `CoinFlipGame` constructor to load the user's balance from `localStorage` using the key `'coinFlipBalance'`, falling back to the `initialBalance` if no saved data is found.
-    - Added a `saveBalance()` method that stores the current `this.balance` in `localStorage` and integrated calls to this method whenever the balance is updated (after a win, loss, or liquidation).
-- **Game Economy Features:**
-    - Set the `initialBalance` to `10000`.
-    - Updated the maximum leverage to `100x` in the UI.
-    - Implemented a daily free payout system, allowing users to claim 1000 balance up to 3 times a day if their balance is 0. This includes a UI button, `localStorage` tracking for claims and date, and automatic daily resets.
-- **Max Leverage Validation and Restart Game Feature:**
-    - Added JavaScript validation in the `flipCoin` method to cap leverage at 100 if a higher value is entered, updating the input field and displaying an error message.
-    - Implemented a "Restart Game" button in the UI with appropriate styling.
-    - Created a `restartGame` method that resets `this.balance` to `this.initialBalance`, clears `'coinFlipBalance'` from `localStorage`, clears game history, resets free claims-related `localStorage` keys, updates the display, and saves the initial balance.
-- **Revised Free Payout Mechanism:**
-    - The free payout is now available when the balance drops below $1000 (previously only when balance was 0).
-    - Upon claiming, the balance is reset to the initial $10000.
-    - The "Claim Free Balance" button's text and enablement conditions have been updated to clearly explain these new rules.
-- **Refine UI, Localize, and Adjust Game Features:**
-    - **Removed "Restart Game" Feature**: Deleted the restart button HTML, event listener, `restartGame()` method, and associated CSS.
-    - **Beautified Website**: Extensively modified `style.css` and embedded styles in `main.js` to create a more polished, monetization-ready aesthetic, including refined color palette, typography, shadows, gradients, and responsive layout.
-    - **Localized All Text to Korean**: Translated all user-facing text in `index.html` and `main.js` to Korean.
-- **Update Branding, Visual Accuracy, and Coin Art:**
-    - **Website Name Changed to "Coin Soar"**: Updated `<title>` and `<h1>` tags in `index.html` to "코인 소어".
-    - **Accurate Coin Face Display Ensured**: Verified that the existing CSS and JavaScript logic correctly displays the landed coin face (heads or tails) according to the outcome.
-    - **Meme Coin Image for Heads Implemented**: Replaced the previous heads coin image with a Dogecoin logo (`https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png`) in both `style.css` and `main.js`'s embedded styles.
-- **Implement Win/Loss Visual Distinction and AI Coin Art:**
-    - **Win/Loss Visual Distinction**: Modified `main.js`'s `flipCoin` method to ensure the coin visually lands on the heads side (`앞면`) if the player wins, and on the tails side (`뒷면`) if the player loses. This overrides the random `isHeads` determination based on the bet outcome.
-    - **AI Coin Art (Heads)**: The heads side now uses the Dogecoin logo as a "meme coin" image (`https://upload.wikimedia.org/wikipedia/fr/d/d0/Dogecoin-logo.png`).
-    - **AI Coin Art (Tails)**: The tails side continues to use the generic coin back image (`https://upload.wikimedia.org/wikipedia/commons/3/30/Coin-back.png`). Given the limitations of generating AI images directly and finding stable, free-to-use URLs for two distinct AI coin faces, this approach provides a "meme coin" feel for heads and clear distinction for tails.
-- **Fix Coin Face Display Bug:**
-    - **Refined `main.js` (`flipCoin` method)**: Removed the `tails-up` class application logic. Instead, directly set `coin.style.transform` within the `animationend` listener to explicitly control the final rotation: `rotateY(0deg)` for heads (win) and `rotateY(180deg)` for tails (loss).
-    - **Removed `.coin.tails-up` CSS**: This CSS class was removed from `style.css` (and verified it was not present in embedded `main.js` styles) as it is no longer needed.
-- **Fix and Revise Free Payout Mechanism (No Daily Limit):**
-    - **Removed Daily Claim Logic**: Deleted `dailyClaimsUsed` and `lastClaimDate` from the constructor, and removed helper methods (`getTodayDateString`, `loadFreeClaims`, `saveFreeClaims`) related to daily limits. Also removed corresponding calls from `connectedCallback` and `flipCoin`.
-    - **Simplified `claimFreeBalance` Method**: The method now simply checks if `this.balance < MIN_BALANCE_FOR_CLAIM` and resets `this.balance` to `this.initialBalance` upon claim, without any daily limit checks.
-    - **Simplified `updateClaimButton` Method**: The button's enablement logic and text now reflect the absence of daily limits, clearly stating it's available when balance is below $1000 and explaining the reset to $10000.
-- **Site Optimization and Code Cleanup:**
-    - **Optimized `main.js`**: Ensured removal of unused properties (`this.dailyClaimsUsed`, `this.lastClaimDate`) and methods (`getTodayDateString`, `loadFreeClaims`, `saveFreeClaims`). Reviewed existing logic for redundancy and maintained consistent formatting.
-    - **Optimized `style.css` and Embedded Styles**: Removed the now-unused `.coin.tails-up` CSS rule from `style.css`. Verified no other redundant or unused styles in `style.css` and the embedded styles within `main.js`. Ensured consistent formatting.
-    - **Reviewed `index.html`**: Confirmed `index.html` remains minimal and clean.
-- **Implement Cyberpunk UI with Tailwind (Design Overhaul):**
-    - **Tailwind CSS Integrated (CDN)**: Tailwind CSS CDN link and custom config (for colors and fonts) added to `index.html`.
-    - **HTML Structure Overhauled**: `index.html` restructured into Hero, Features (game component), CTA, and Footer sections with initial global Tailwind dark mode and text color classes.
-    - **`style.css` Redesigned**: Overhauled global styles to embrace the cyberpunk dark UI and neon aesthetic, including custom scrollbar, updated color palette variables, stronger text shadows, and subtle animation keyframes (`neon-glow-blue`, `neon-glow-green`, `subtle-flicker`).
-    - **Embedded Styles Redesigned in `main.js`**: Updated the `<style>` block within `shadowRoot.innerHTML` to align with the new design language, ensuring internal components maintain the cyberpunk aesthetic and responsiveness, including consistent `coin` transitions and `flipping` animations.
+"코인 소어"는 사이버펑크 테마의 웹 기반 코인 플립 게임입니다. 사용자는 가상의 재화(사이버-크레딧)를 베팅하여 운을 시험하고 부를 늘릴 수 있습니다. 이 프로젝트는 현대적인 웹 기술과 시각적으로 매력적인 디자인을 결합하여 사용자에게 몰입감 있는 경험을 제공하는 것을 목표로 합니다.
 
-## Current Task: None
-### Plan
-All current tasks are complete.
+## 디자인 및 기능
+
+### 스타일 및 디자인
+- **테마:** 사이버펑크, 네온, 디스토피아
+- **색상 팔레트:**
+  - 주요 배경: `darkBg` (#080A0C)
+  - 보조 배경: `darkSurface` (#12161A)
+  - 강조 색상: `neonGreen` (#39FF14), `neonBlue` (#00F0FF), `neonPurple` (#8A2BE2)
+- **폰트:**
+  - 헤더/강조: 'Press Start 2P' (픽셀 아트, 사이버펑크 스타일)
+  - 본문: 'Inter' (모던하고 가독성 높은 산세리프)
+- **시각 효과:**
+  - 텍스트에 `drop-shadow`를 사용하여 네온 효과 강조
+  - Glitch 효과를 헤더에 적용하여 동적인 느낌 부여
+  - 섹션 전환 시 `fade-in` 애니메이션 적용
+  - 버튼 및 인터랙티브 요소에 `hover` 효과 및 `transform`을 적용하여 사용자 상호작용 강화
+- **아이콘:**
+  - 파비콘: 게임 컨트롤러 모양의 SVG 아이콘을 사용하여 프로젝트의 정체성 표현
+
+### 기능
+- **코인 플립 게임:**
+  - Web Component(`coin-flip-game`)를 사용하여 게임 로직을 캡슐화.
+  - 사용자는 '앞면' 또는 '뒷면'을 선택하고 베팅 금액을 입력할 수 있습니다.
+  - '코인 던지기' 버튼을 누르면 애니메이션과 함께 결과가 표시됩니다.
+  - 승리 시 베팅액의 두 배를 얻고, 패배 시 베팅액을 잃습니다.
+- **잔액 표시:**
+  - 사용자의 현재 사이버-크레딧 잔액을 실시간으로 표시합니다.
+- **반응형 웹 디자인:**
+  - Tailwind CSS를 사용하여 모바일, 태블릿, 데스크톱 등 다양한 화면 크기에 최적화된 레이아웃을 제공합니다.
+- **Google Analytics 및 AdSense 연동:**
+  - `gtag.js`를 통해 사용자 행동 데이터를 수집하고, Google AdSense를 통해 광고를 표시할 수 있는 기반을 마련했습니다.
+- **제휴 문의 폼:**
+  - Formspree를 연동하여 사용자가 제휴 관련 문의를 쉽게 보낼 수 있도록 합니다.
+- **정적 페이지:**
+  - 개인정보처리방침(`privacy.html`) 및 이용약관(`terms.html`) 페이지를 제공하여 투명성을 높입니다.
+
+## 현재 변경 요청 계획
+
+- **요청:** 마음에 들지 않는 현재 파비콘을 어울리는 SVG로 만들어 변경해달라는 요청 및 최고로 완벽한 SEO를 만들어달라는 요청.
+- **계획:**
+  1. **SVG 아이콘 디자인 및 생성:** "friendtogame"이라는 프로젝트 이름과 게임 테마에 어울리는 간단하고 현대적인 게임 컨트롤러 모양의 SVG 아이콘을 제작합니다.
+  2. **파일 저장:** 생성된 SVG 아이콘을 `images/favicon.svg` 경로에 저장합니다. `images` 디렉토리가 없는 경우 새로 생성합니다.
+  3. **HTML 업데이트 (Favicon):** `index.html` 파일의 `<head>` 섹션에 `<link rel="icon" type="image/svg+xml" href="images/favicon.svg">` 태그를 추가하여 새로 만든 SVG 아이콘을 파비콘으로 설정합니다. 기존 파비콘 링크가 있다면 교체합니다.
+  4. **SEO 최적화 (index.html):**
+      - `<title>` 태그를 "코인 소어 | 운명을 시험하는 사이버펑크 코인 플립 게임"으로 업데이트합니다.
+      - `<meta name="description">` 태그 내용을 "운명을 시험하고 부를 쟁취하세요! 2077년 사이버펑크 세계관의 코인 플립 게임, 코인 소어에서 당신의 직감을 믿고 짜릿한 승리를 맛보세요."로 업데이트하여 더 매력적으로 만듭니다.
+      - `og:title`, `og:description`, `twitter:title`, `twitter:description` 등 Open Graph 및 Twitter 카드 메타 태그를 새로운 제목 및 설명에 맞춰 업데이트합니다.
+      - `<link rel="canonical" href="https://coinflip-2mb.pages.dev/">` 태그를 추가하여 표준 URL을 명시합니다.
+      - `VideoGame` 스키마를 사용하는 JSON-LD 스크립트를 추가하여 검색 엔진이 게임 콘텐츠를 더 잘 이해하도록 돕습니다.
+  5. **SEO 최적화 (sitemap.xml):**
+      - `sitemap.xml` 파일의 `lastmod` 날짜를 최신(`2026-02-04`)으로 업데이트합니다.
+      - 중복 콘텐츠 문제를 해결하기 위해 `https://coinflip-2mb.pages.dev/index.html` 대신 `https://coinflip-2mb.pages.dev/`만 메인 페이지의 표준 URL로 포함합니다.
+  6. **SEO 최적화 (robots.txt):**
+      - `robots.txt` 파일이 이미 최적으로 설정되어 있음을 확인하고, 추가 변경 사항은 적용하지 않습니다. (모든 크롤러 허용 및 사이트맵 경로 지정)
