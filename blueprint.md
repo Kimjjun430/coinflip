@@ -58,3 +58,5 @@
       - 중복 콘텐츠 문제를 해결하기 위해 `https://coinflip-2mb.pages.dev/index.html` 대신 `https://coinflip-2mb.pages.dev/`만 메인 페이지의 표준 URL로 포함합니다.
   6. **SEO 최적화 (robots.txt):**
       - `robots.txt` 파일이 이미 최적으로 설정되어 있음을 확인하고, 추가 변경 사항은 적용하지 않습니다. (모든 크롤러 허용 및 사이트맵 경로 지정)
+  7. **Userback 피드백 시스템 통합:**
+      - `index.html`의 `</body>` 태그 바로 앞에 Userback 스크립트를 추가하여 피드백 시스템을 연동합니다.
